@@ -1,0 +1,11 @@
+[
+  {
+    "pk" : 1,
+    "model" : "leaa.TerrainView",
+    "fields" : {
+      "controlPos" : [0,0,0],
+      "cameraPos" : [0,-80,80],
+      "worldPos" : [0,0,0]
+    }
+  }
+]

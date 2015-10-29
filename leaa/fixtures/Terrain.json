@@ -1,0 +1,19 @@
+[
+  {
+    "pk": 1,
+    "model": "leaa.Terrain",
+    "fields": {
+      "name" : "HJAndrews",
+      "MAPx" : 100,
+      "MAPy" : 100,
+      "DEMx" : 458,
+      "DEMy" : 344,
+      "north_lat": 44.285258,
+      "south_lat": 44.192358,
+      "east_lng":-122.097675,
+      "west_lng":-122.268442,
+      "maxHeight" : 1215,
+      "fileName" : "HJAndrews.bin"
+    }
+  }
+]

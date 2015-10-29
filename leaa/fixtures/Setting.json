@@ -1,0 +1,24 @@
+[
+  {
+    "pk" : 1,
+    "model" : "leaa.Setting",
+    "fields" : {
+      "vectorLength" : 0.9,
+      "vectorHeight" : 4.0,
+      "terrainScale" : 1.2,
+      "animationSpeed" : 2.0,
+      "user" : 1
+    }
+  },
+  {
+    "pk" : 2,
+    "model" : "leaa.Setting",
+    "fields" : {
+      "vectorLength" : 2.0,
+      "vectorHeight" : 1.0,
+      "terrainScale" : 0.8,
+      "animationSpeed" : 0.8,
+      "user" : 2
+    }
+  }
+]

@@ -1,0 +1,138 @@
+body
+{
+    font-family: ‘Tahoma’, ‘Geneva’, sans-serif;
+    background: slategrey;
+}
+
+h1
+{
+    font-size:175%;
+    line-height:0.9em;
+    color: black;
+}
+
+h2
+{
+    font-size:125%;
+    line-height:1.2em;
+    color:black;
+}
+
+h4
+{
+    color:black;
+}
+
+form
+{
+    color: black;
+}
+
+a
+{
+    color: white;
+}
+
+a:link, a:hover, a:active, a:visited
+{
+    text-decoration:none;
+    color: deepskyblue;
+}
+
+button
+{
+    /*border-radius: 0.2em;*/
+    margin:0.1em 0;
+}
+
+#header, #sidebar, #bottom-wrapper, #controls-1, #controls-2, #controls-3, #footer
+{
+    /*margin:0.5em;*/
+    /*border:1px solid;*/
+}
+/*
+#wrapper
+{
+    min-width:56em;
+}
+*/
+#top-wrapper
+{
+    height:38em;
+    padding:0.5em;
+    /*border:1px solid black;*/
+}
+
+#scene, #sidebar, #controls-1, #controls-2, #controls-3
+{
+    height:100%;
+    /*margin:0 0.5em;*/
+}
+
+#scene
+{
+    /*float:left;*/
+	/*width:65%;*/
+}
+
+#sidebar
+{
+    /*float:right;*/
+    /*width:30%;*/
+}
+
+#console
+{
+    font-family:'Courier New', 'Courier', 'Monaco', monospace;
+    font-size:80%;
+    height:90%;
+    max-height: 250px;
+}
+
+#bottom-wrapper
+{
+    /*height:20em;*/
+    /*padding:0.5em;*/
+}
+
+#controls-1, #controls-2, #controls-3, #controls-4, #sidebar
+{
+    float:left;
+    width:22%;
+    margin-bottom: 2em;
+    padding-bottom: 2em;
+}
+
+#file-selector
+{
+	/*float:left;*/
+	/*width:25%;*/
+}
+
+.scrollable-menu {
+    height: auto;
+    max-height: 200px;
+    overflow-x: hidden;
+}
+
+/****ColorSelector tags****/
+
+#colorSelector {
+	position: relative;
+	width: 36px;
+	height: 36px;
+	background: url(images/colorpicker/select.png);
+}
+#colorSelector div {
+	position: absolute;
+	top: 3px;
+	left: 3px;
+	width: 30px;
+	height: 30px;
+	background: url(images/colorpicker/select.png) center;
+}
+
+#customWidget {
+	position: relative;
+	height: 36px;
+}
