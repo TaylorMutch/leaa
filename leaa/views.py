@@ -8,7 +8,7 @@ from rest_framework.reverse import reverse
 from django.contrib.auth.models import User
 from .forms import TerrainForm, StationForm, DataFileForm
 from create_models import *
-import os, shutil
+import os
 from fileReader import sdrDateToString_YYYYMMDD
 import zipfile as z
 # Create your views here.
@@ -24,9 +24,7 @@ def api_root(request):
 
 def index(request):
     # TODO: Replace with arbitrary user lookup
-    user = User.objects.filter(id=2)[0]
-    return render(request, 'leaa/index.html', {'user': user})
-
+    return render(request, 'leaa/index.html')
 
 def add_terrain(request):
     if request.method == "POST":
@@ -71,12 +69,19 @@ def add_datafile(request):
             if s.terrain == t:
                 # Determine which filetype we got # TODO: Add more security than this, this is easily thwarted...
                 uf = request.FILES['file']
-                filename, file_ext = os.path.splitext(uf.name)
+                file_ext = os.path.splitext(uf.name)[1]
                 # We got a single file
                 if file_ext == '.sdr':
                     date = uf.readline(16).decode('ascii')
                     date = sdrDateToString_YYYYMMDD(date[4:])
-                    d = DataFile(creationDate=date,station=s,terrain=t,filePath=uf,fileName=filename)
+
+                    d_path = os.path.join(MEDIA_ROOT, t.name + '/' + s.name + '/' + date[:4] + '/')
+                    if not os.path.exists(d_path):
+                        os.mkdir(d_path)
+                    with open(os.path.join(d_path, uf.name), 'wb') as d_file:
+                        for chunk in uf.chunks():
+                            d_file.write(chunk)
+                    d = DataFile(creationDate=date,station=s,terrain=t,fileName=uf.name)
                     d.save()
 
                 # We got a .zip

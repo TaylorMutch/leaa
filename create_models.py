@@ -117,8 +117,3 @@ def create_station(name, t, lat, long):
 
     s = Station(name=name, terrain=t, lat=lat, long=long, demX=demX, demY=demY)
     s.save()
-
-
-def create_datafile():
-
-    pass

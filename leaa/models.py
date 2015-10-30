@@ -42,7 +42,7 @@ class DataFile(models.Model):
     station = models.ForeignKey('Station')
     terrain = models.ForeignKey('Terrain')
     fileName = models.CharField(max_length=50)
-    filePath = models.FileField(upload_to=datafile_directory_path)
+    #filePath = models.FileField(upload_to=datafile_directory_path)
 
     def __str__(self):
         return str(self.creationDate)
