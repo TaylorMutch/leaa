@@ -56,15 +56,17 @@
         </div>
     </div>
 
-    <nav class="navbar navbar-default navbar-inverse">
-        <div>
+    <nav class="navbar navbar-inverse">
+        <div class="container-fluid">
             <div class="navbar-header">
-                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#SignInOrUploadFileForm">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
                 <a href="{% url 'index' %}" class="navbar-brand">VALCEX</a>
+            </div>
+            <div class="collapse navbar-collapse" id="myNavbar">
                 <ul class="nav navbar-nav">
                     <li><a href="#" data-toggle="modal" data-target="#howtomodal">How-To</a></li>
                     <li><a href="http://blogs.evergreen.edu/vistas/" target="_blank">VISTAS Blog</a></li>
@@ -72,17 +74,19 @@
                     <li><a href="{% url "add_station" %}">Add Station</a></li>
                     <li><a href="{% url "add_datafile" %}">Add Data</a></li>
                 </ul>
+                <ul class="nav navbar-nav navbar-right">
+                    <li><a href="#"><span class="glyphicon glyphicon-log-in"></span> Log In</a></li>
+                    <li><a href="#"><span class="glyphicon glyphicon-user"></span> Sign Up</a></li>
+                </ul>
             </div>
-            <!-- UNDER CONSTRUCTION -->
+            <!-- UNDER CONSTRUCTION
             <div id="SignInOrUploadFileForm" class="navbar-collapse collapse">
                 {% if user.password == 'password' %}
                 <form class="navbar-form navbar-right" id="signInForm">
                     <div class="form-group">
-                        <!--input name="username" type="text" placeholder="Username or Email" class="form-control"-->
                         <input name="username" type="text" placeholder="Under" class="form-control">
                     </div>
                     <div class="form-group">
-                        <!--input name="password" type="password" placeholder="Password" class="form-control"-->
                         <input name="password" type="password" placeholder="Construction" class="form-control">
                     </div>
                     <button type="submit" class="btn btn-success disabled" id="signInBtn">Sign In</button>
