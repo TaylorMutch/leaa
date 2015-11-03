@@ -1,0 +1,38 @@
+{% extends "leaa/base.html" %}
+{% load staticfiles %}
+{% block css %}
+    <link href="{% static "leaa/css/forms.css" %}" rel="stylesheet">
+{% endblock css %}
+
+{% block content %}
+    <div class="container">
+        <form class="form-signin" method="post">
+
+            {% block title %}
+            {% endblock title %}
+
+            {% csrf_token %}
+            <fieldset>
+                {% for field in form %}
+                    <div class="control-group">
+                        <label class="control-label">{{ field.label }}</label>
+                        <div class="controls">
+                            {{ field }}
+                            {% if field.errors %}
+                                <span class="help-inline">
+                                    {% for error in  field.errors %}{{ error }}{% endfor %}
+                                </span>
+                            {% endif %}
+                            {% if field.help_text %}
+                                <p class="help-inline"><small>{{ field.help_text }}</small></p>
+                            {% endif %}
+                        </div>
+                    </div>
+                {% endfor %}
+            </fieldset>
+            <div class="form-actions">
+                <button id="submit-btn" type="submit" class="btn btn-primary btn-block" >Submit</button>
+            </div>
+        </form>
+    </div>
+{% endblock %}

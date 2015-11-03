@@ -1,10 +1,43 @@
-{% extends "leaa/base.html" %}
+{% extends "leaa/forms/add_base.html" %}
+{% block title %}
+    <script>
+    $(document).ready(function() {
+        var lat1, lat2, lng1, lng2;
+        $("select").on('click', function () {
+            var selected = $('[name=terrain]').val();
+            if (selected !== "") {
+                $.getJSON('/terrains/' + selected.toString(), function(response) {
+                    lat1 = response['north_lat'];
+                    lat2 = response['south_lat'];
+                    lng1 = response['east_lng'];
+                    lng2 = response['west_lng'];
+                }).done(function (){
+                    console.log(lat1);
+                    console.log(lat2);
+                    console.log(lng1);
+                    console.log(lng2);
+                });
+            }
+        });
+        $('#submit-btn').on('click', function(event) {
+            var mylat = $('#id_lat').val();
+            var mylng = $('#id_long').val();
+            if (mylat > lat1 || mylat < lat2) {
+                event.preventDefault();
+                alert('Check latitude coordinates, out of bounds. \n' +
+                        'North Latitude = ' + lat1.toString() +'\n' +
+                        'South Latitude = ' + lat2.toString());
+                return;
+            }
+            if (mylng > lng1 || mylng < lng2) {
+                event.preventDefault();
+                alert('Check longitude coordinates, out of bounds. \n' +
+                        'East Longitude = ' + lng1.toString() +'\n' +
+                        'West Latitude = ' + lng2.toString());
+            }
+        })
+    })
+    </script>
+    <h2 class="form-signin-heading">Add New Station</h2>
+{% endblock title %}
 
-{% block content %}
-    <h1>New Station</h1>
-    <form method="post" class="post-form">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit" class="save btn btn-default">Submit</button>
-    </form>
-{% endblock %}

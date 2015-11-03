@@ -45,17 +45,6 @@ button
     margin:0.1em 0;
 }
 
-#header, #sidebar, #bottom-wrapper, #controls-1, #controls-2, #controls-3, #footer
-{
-    /*margin:0.5em;*/
-    /*border:1px solid;*/
-}
-/*
-#wrapper
-{
-    min-width:56em;
-}
-*/
 #top-wrapper
 {
     height:38em;
@@ -69,17 +58,6 @@ button
     /*margin:0 0.5em;*/
 }
 
-#scene
-{
-    /*float:left;*/
-	/*width:65%;*/
-}
-
-#sidebar
-{
-    /*float:right;*/
-    /*width:30%;*/
-}
 
 #console
 {
@@ -87,12 +65,6 @@ button
     font-size:80%;
     height:90%;
     max-height: 250px;
-}
-
-#bottom-wrapper
-{
-    /*height:20em;*/
-    /*padding:0.5em;*/
 }
 
 #controls-1, #controls-2, #controls-3, #controls-4, #sidebar
@@ -103,11 +75,6 @@ button
     padding-bottom: 2em;
 }
 
-#file-selector
-{
-	/*float:left;*/
-	/*width:25%;*/
-}
 
 .scrollable-menu {
     height: auto;

@@ -8,6 +8,7 @@ from vistas_project_alpha import settings
 
 urlpatterns = [
     url(r'^$', views.index, name="index"),
+    url(r'^add_user/$', views.add_user, name="add_user"),
     url(r'^add_terrain/$', views.add_terrain, name="add_terrain"),
     url(r'^add_station/$', views.add_station, name="add_station"),
     url(r'^add_datafile/$', views.add_datafile, name="add_datafile"),

@@ -52,7 +52,13 @@ function makeArrow(stationPos, cSpeed, cDirection, cHeight) {
         var dir = calcDirection(cDirection);
         var target = origin.clone().add(dir);
         var qDir = new THREE.Vector3().subVectors(target, origin);
-        return new THREE.ArrowHelper(qDir.normalize(), origin, cSpeed * manager.VectorLength, vectorColor );
+        var result = new THREE.ArrowHelper(qDir.normalize(), origin, cSpeed*manager.VectorLength, vectorColor,.5,.35);
+        var r = (qDir.normalize().x > 0) ? parseInt(qDir.normalize().x*255) : 0;
+        var g = (qDir.normalize().x < 0) ? parseInt(qDir.normalize().x*-1*255) : 0;
+        var b = (qDir.normalize().y < 0) ? parseInt(qDir.normalize().y*-1*255) : 0;
+        var colorstring = "rgb(" + r.toString() + ',' + g.toString() + ',' + b.toString() +")";
+        result.cone.material.color = new THREE.Color(colorstring);
+        return result;
     }
 }
 

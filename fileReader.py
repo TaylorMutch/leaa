@@ -1,7 +1,7 @@
 __author__ = 'Taylor'
 
-from leaa.models import DataFile, Station
-import os
+from leaa.models import Terrain, DataFile, Station
+import os, struct
 from vistas_project_alpha.settings import MEDIA_ROOT
 from django.utils import timezone
 from datetime import datetime, date
@@ -13,6 +13,12 @@ months = [None, "Jan", "Feb", "Mar", "Apr", "May", "Jun",
                 "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
 
 tags = {'DCL', 'VCL', 'SDR', 'H  '}
+
+def readTerrain(terrain):
+    with open(os.path.join(MEDIA_ROOT, terrain.name + '/' + terrain.fileName), 'rb') as t:
+        data = t.read()
+    t.close()
+    return data
 
 
 def readSDR(file, station):
@@ -62,13 +68,13 @@ def readRecordDateToString(fileName, stationName):
     date = date[:11]
     return date
 
-
+'''
 def createDataFile(fileName, stationName, creationDate):
     station_match = Station.objects.filter(name=stationName)[0]
     newDataFile = DataFile(station=station_match, fileName=fileName, creationDate=creationDate)
     newDataFile.save()
     print('Added ' + fileName + ' to station' + stationName)
-
+'''
 
 def dateStringToDate(strDate):
     _date = date(int(strDate[:4]),int(strDate[4:6]),int(strDate[6:]))

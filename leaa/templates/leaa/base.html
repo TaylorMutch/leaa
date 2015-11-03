@@ -3,6 +3,8 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="description" content="A 3D visualization of wind data">
+    <meta name="author" content="Kendra Schmal, Taylor Mutch, Nik Molnar, and the VISTAS Group"
     <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
 
     <title>VALCEX - demo</title>
@@ -12,8 +14,9 @@
     <link href="{% static "leaa/css/jquery-ui.min.css" %}" rel="stylesheet">
     <link href="{% static "leaa/css/jquery-ui.structure.min.css" %}" rel="stylesheet">
     <link href="{% static "leaa/css/jquery-ui.theme.min.css" %}" rel="stylesheet">
-    <link href="{% static "leaa/css/colorpicker.css" %}" rel="stylesheet">
-    <link href="{% static "leaa/css/valcex.css" %}" rel="stylesheet">
+
+    {% block css %}
+    {% endblock css %}
     <link rel="shortcut icon" type="image/png" href="{% static "favicon.ico" %}">
 </head>
 <body>
@@ -21,22 +24,8 @@
     <script src="{% static "leaa/js/jquery-1.11.3.min.js" %}"></script>
     <script src="{% static "leaa/js/jquery-ui.min.js" %}"></script>
     <script src="{% static "leaa/bootstrap/bootstrap.min.js" %}"></script>
-    <script src="{% static "leaa/js/colorpicker.js" %}"></script>
-    <script src="{% static "leaa/three/three_r72.min.js" %}"></script>
-    <script src="{% static "leaa/three/CombinedCamera.js" %}"></script>
-    <script src="{% static "leaa/three/OrbitControls.js" %}"></script>
-    <script src="{% static "leaa/three/TerrainLoader.js" %}"></script>
-    <script src="{% static "leaa/three/Screenshot.js" %}"></script>
-    <!-- VALCEX CORE LIBRARY -->
-    <script src="{% static "leaa/core/VisManager.js" %}"></script>
-    <script src="{% static "leaa/core/stations.js" %}"></script>
-    <script src="{% static "leaa/core/arrows.js" %}"></script>
-    <script src="{% static "leaa/core/time.js" %}"></script>
-    <script src="{% static "leaa/core/timeline.js" %}"></script>
-    <!-- VALCEX UI SCRIPTS (via steal.js) -->
-    <script src="{% static "steal/steal.js" %}"></script>
-    <script src="{% static "leaa/ui/leaa.js" %}"></script>
-
+    {% block js %}
+    {% endblock js %}
 
     <div class="modal fade" id="howtomodal" tabindex="-1" role="dialog">
         <div class="modal-dialog">
@@ -70,36 +59,31 @@
                 <ul class="nav navbar-nav">
                     <li><a href="#" data-toggle="modal" data-target="#howtomodal">How-To</a></li>
                     <li><a href="http://blogs.evergreen.edu/vistas/" target="_blank">VISTAS Blog</a></li>
+                    {% if user.is_authenticated %}
                     <li><a href="{% url "add_terrain" %}">Add Terrain</a></li>
                     <li><a href="{% url "add_station" %}">Add Station</a></li>
                     <li><a href="{% url "add_datafile" %}">Add Data</a></li>
+                    {% endif %}
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
-                    <li><a href="#"><span class="glyphicon glyphicon-log-in"></span> Log In</a></li>
-                    <li><a href="#"><span class="glyphicon glyphicon-user"></span> Sign Up</a></li>
+                    <li><a href="#">Welcome,
+                        {% if user.is_authenticated %}
+                        {{ user.username }}
+                        {% else %}
+                        Guest
+                        {% endif %}
+                    </a></li>
+                    {% if not user.is_authenticated %}
+                        <li><a href="{% url "login" %}"><span class="glyphicon glyphicon-log-in"></span> Log In</a></li>
+                        <li><a href="{% url "add_user" %}"><span class="glyphicon glyphicon-user"></span> Sign Up</a></li>
+                    {% else %}
+                        <li><a href="{% url "logout" %}"><span class="glyphicon glyphicon-log-out"></span> Log Out</a></li>
+                    {% endif %}
                 </ul>
             </div>
-            <!-- UNDER CONSTRUCTION
-            <div id="SignInOrUploadFileForm" class="navbar-collapse collapse">
-                {% if user.password == 'password' %}
-                <form class="navbar-form navbar-right" id="signInForm">
-                    <div class="form-group">
-                        <input name="username" type="text" placeholder="Under" class="form-control">
-                    </div>
-                    <div class="form-group">
-                        <input name="password" type="password" placeholder="Construction" class="form-control">
-                    </div>
-                    <button type="submit" class="btn btn-success disabled" id="signInBtn">Sign In</button>
-                    <span id="signInOrRegisterText">or</span>
-                    <button type="button" class="btn btn-info disabled" id="registerBtn">Register</button>
-                </form>
-                {% else %}
-                {% endif %}
-            </div>
-            <!-- End Construction Zone -->
         </div>
     </nav>
     {% block content %}
-    {% endblock %}
+    {% endblock content %}
 </body>
 </html>

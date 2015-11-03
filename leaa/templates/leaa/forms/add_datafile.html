@@ -1,10 +1,4 @@
-{% extends "leaa/base.html" %}
-
-{% block content %}
-    <h1>New SODAR Files</h1>
-    <form enctype="multipart/form-data" method="post" class="post-form">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit" class="save btn btn-default">Submit</button>
-    </form>
-{% endblock %}
+{% extends "leaa/forms/add_base.html" %}
+{% block title %}
+    <h2 class="form-signin-heading">Add New Data</h2>
+{% endblock title %}

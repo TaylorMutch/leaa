@@ -2,7 +2,6 @@
  * Created by Taylor on 10/11/2015.
  */
 
-//TODO: Get back from Christoph if they are index 0 or index 1 timestamps
 months = {'Jan':'01',
           'Feb':'02',
           'Mar':'03',
@@ -55,7 +54,7 @@ function VisManager(){ //TODO: Could we use this to associate a given scene with
     this.VectorHeight = 1;
     this.VectorLength = 1;
     this.LiveUpdate = false;
-    this.ArrowColor = parseInt("ffff00", 16); //TODO: Add colorpicking back into the mix...
+    this.ArrowColor = parseInt("ffff00", 16);
 }
 
 /**

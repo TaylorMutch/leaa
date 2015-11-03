@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, render_to_response
 from leaa.models import Terrain,Station,DataFile,TerrainView,Setting
 from leaa.serializers import *
 from rest_framework import generics, permissions, renderers, status
@@ -6,12 +6,15 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework.reverse import reverse
 from django.contrib.auth.models import User
-from .forms import TerrainForm, StationForm, DataFileForm
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth import login, logout, authenticate
+from .forms import TerrainForm, StationForm, DataFileForm, UserForm
 from create_models import *
 import os
 from fileReader import sdrDateToString_YYYYMMDD
 import zipfile as z
 # Create your views here.
+
 
 @api_view(('GET',))
 def api_root(request):
@@ -22,10 +25,49 @@ def api_root(request):
     })
 
 
+def login_view(request):
+    if request.method == 'POST':
+        username = request.POST['username']
+        password = request.POST['password']
+        user = authenticate(username=username, password=password)
+        if user is not None:
+            if user.is_active:
+                login(request, user)
+                return redirect('leaa.views.index')
+                #return redirect(request.POST['next'])
+                #return redirect('/login/?next=%s' % request.path)
+            else:
+                return render(request, 'leaa/forms/login.html')
+        else:
+            return render(request, 'leaa/forms/login.html')
+    else:
+        return render(request, 'leaa/forms/login.html')
+
+
+def logout_view(request):
+    logout(request)
+    return redirect('leaa.views.index')
+
+
+def add_user(request):
+    if request.method == 'POST':
+        form = UserForm(request.POST)
+        if form.is_valid():
+            new_user = User.objects.create_user(**form.cleaned_data)
+            #login(new_user.username, new_user.password)
+            # TODO: Make this better? We need to associate our new user with settings now.
+            return redirect('leaa.views.index')
+    else:
+        form = UserForm()
+    return render(request, 'leaa/forms/signup.html', {'form':form})
+
+
+
 def index(request):
-    # TODO: Replace with arbitrary user lookup
     return render(request, 'leaa/index.html')
 
+
+@login_required(login_url='/login/')
 def add_terrain(request):
     if request.method == "POST":
         form = TerrainForm(request.POST)
@@ -38,6 +80,7 @@ def add_terrain(request):
     return render(request, 'leaa/forms/add_terrain.html', {'form': form})
 
 
+@login_required(login_url='/login/')
 def add_station(request):
     if request.method == "POST":
         form = StationForm(request.POST)
@@ -58,6 +101,7 @@ def add_station(request):
     return render(request, 'leaa/forms/add_station.html', {'form': form})
 
 
+@login_required(login_url='/login/')
 def add_datafile(request):
     if request.method == "POST":
         form = DataFileForm(request.POST, request.FILES)
@@ -109,10 +153,6 @@ def add_datafile(request):
     else:
         form = DataFileForm()
     return render(request, 'leaa/forms/add_datafile.html', {'form': form})
-
-
-def test(request):
-    return render(request, 'leaa/test_index_w_shaders.html')
 
 
 class TerrainList(generics.ListAPIView):

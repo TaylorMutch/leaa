@@ -1,0 +1,23 @@
+{% extends "leaa/base.html" %}
+{% load staticfiles %}
+
+{% block css %}
+    <link href="{% static "leaa/css/forms.css" %}" rel="stylesheet">
+{% endblock css %}
+
+{% block content %}
+    <div id="login" class="container">
+        <form class="form-signin" name="LoginForm" method="post">
+            <h2 class="form-signin-heading">Please Sign In</h2>
+            {% csrf_token %}
+            {% if next %}
+                <input type="hidden" name="next" value="{{ next }}" />
+            {% endif %}
+            <label class="sr-only" for="username">Username</label>
+            <input type="text" class="form-control" id="username" name="username"  placeholder="Username">
+            <label class="sr-only" for="password">Password</label>
+            <input type="password" class="form-control" name="password" id="password" placeholder="Password">
+            <button type="submit" class="btn btn-lg btn-primary btn-block">Sign In</button>
+        </form>
+    </div>
+{% endblock content %}
