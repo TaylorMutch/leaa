@@ -1,10 +1,26 @@
 {% extends "leaa/base.html" %}
+{% load staticfiles %}
+
+{% block css %}
+    <link href="{% static "leaa/css/forms.css" %}" rel="stylesheet">
+{% endblock css %}
 
 {% block content %}
-    <h1>Create New User Profile</h1>
-    <form method="post" class="post-form">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit" class="save btn btn-default">Create New Account</button>
-    </form>
+    <div id="signup" class="container">
+        <form method="post" class="form-signin">
+            <h2>Create New Profile</h2>
+            {% csrf_token %}
+            {% if next %}
+                <input type="hidden" name="next" value="{{ next }}" />
+            {% endif %}
+            <label class="sr-only" for="username">Username</label>
+            <input type="text" class="form-control" id="username" name="username"  placeholder="Username">
+            <label class="sr-only" for="email">Email</label>
+            <input type="email" class="form-control" id="email" name="email" placeholder="Email">
+            <label class="sr-only" for="password">Password</label>
+            <input type="password" class="form-control" name="password" id="password" placeholder="Password">
+        <button type="submit" class="btn btn-lg btn-primary btn-block">Create New Account</button>
+        </form>
+    </div>
+
 {% endblock %}
