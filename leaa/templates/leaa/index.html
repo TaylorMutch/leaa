@@ -2,13 +2,13 @@
 {% load staticfiles %}
 
 {% block css %}
-    <link href="{% static "leaa/css/colorpicker.css" %}" rel="stylesheet">
     <link href="{% static "leaa/css/valcex.css" %}" rel="stylesheet">
 {% endblock css %}
 
 {% block js %}
-    <script src="{% static "leaa/js/colorpicker.js" %}"></script>
-    <script src="{% static "leaa/three/three_r72.min.js" %}"></script>
+    <script src="{% static "leaa/js/stats.min.js" %}"></script>
+    <script src="{% static "leaa/js/dat.gui.min.js" %}"></script>
+    <script src="{% static "leaa/three/three.min.js" %}"></script>
     <script src="{% static "leaa/three/CombinedCamera.js" %}"></script>
     <script src="{% static "leaa/three/OrbitControls.js" %}"></script>
     <script src="{% static "leaa/three/TerrainLoader.js" %}"></script>
@@ -17,93 +17,41 @@
     <script src="{% static "leaa/core/VisManager.js" %}"></script>
     <script src="{% static "leaa/core/stations.js" %}"></script>
     <script src="{% static "leaa/core/arrows.js" %}"></script>
-    <script src="{% static "leaa/core/time.js" %}"></script>
     <script src="{% static "leaa/core/timeline.js" %}"></script>
+
     <!-- VALCEX UI SCRIPTS (via steal.js) -->
     <script src="{% static "steal/steal.js" %}"></script>
     <script src="{% static "leaa/ui/leaa.js" %}"></script>
+    <script src="{% static "leaa/ui/settings.js" %}"></script>
 {% endblock js %}
 
 {% block content %}
-    <div class="container">
-		<div id="top-controls" class="row">
-            <div class="col-xs-2 col-mid-1 dropdown">
-                <button  class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-					Select Terrain
-					<span class="caret"></span>
-				</button>
-                <ul id="demPicker" class="dropdown-menu"></ul>
+    <div id="top-wrapper" class="row">
+        <div id="scene" class="text-center">
+            <div class="col-md-4 col-md-offset-4 col-sm-6 col-sm-offset-3 well">
+                <div id="current-timestamp-container">
+                    <h4 id="current-timestamp-label" class="text-center">Scene Empty - Select Terrain</h4>
+                </div>
             </div>
-            <div class="col-xs-2 col-mid-1 dropdown">
-                <button  class="btn btn-default dropdown-toggle" data-toggle="dropdown">
-                    Select Data
-                    <span class="caret"></span>
-                </button>
-                <ul id="dataPicker" class="dropdown-menu scrollable-menu">
-                    <li>No Data, Load a Terrain</li>
-                </ul>
+            <div id="sidebar" class="col-md-4">
+                <div id="console">
+                    <ul id="sodarLog" class="scrollable-menu"></ul>
+                </div>
             </div>
-			<div class="col-xs-6 col-md-5 well" data-toggle="tooltip"
-				data-placement="right" data-original-title="Current SODAR reading displayed in the scene">
-				<div id="current-timestamp-container">
-					<h3 id="current-timestamp-label" class="text-center">Scene Empty - Select Terrain</h3>
-				</div>
-			</div>
-		</div>
-        <div id="top-wrapper" class="row">
-            <div id="scene"></div>
         </div>
         <div id="slider" class="row">
-                <div id="timelineSlider"></div>
+            <div id="timelineSlider"></div>
         </div>
         <div class="row">
             <div class="col-lg-12">
                 <div class="btn-group">
-                    <button id="begin" class="btn btn-default disabled" type="button"><span class="glyphicon glyphicon-repeat" aria-hidden="true"></span></button>
-                    <button id="back" class="btn btn-default disabled" type="button"><span class="glyphicon glyphicon-backward" aria-hidden="true"></span></button>
-                    <button id="play" class="btn btn-default disabled" type="button"><span id="play-glyph" class="glyphicon glyphicon-play" aria-hidden="true"></span></button>
-                    <button id="forward" class="btn btn-default disabled" type="button"><span class="glyphicon glyphicon-forward" aria-hidden="true"></span></button>
-                    <button id="reset" class="btn btn-default disabled" type="button">Reset Scene</button>
-                    <button id="live-update" class="btn btn-default disabled" type="button" data-toggle="tooltip" data-original-title="Disable if you have a low-end machine">
-                        Enable Live Update
-                    </button>
+                    <button id="begin" class="btn btn-default disabled playback" type="button"><span class="glyphicon glyphicon-repeat" aria-hidden="true"></span></button>
+                    <button id="back" class="btn btn-default disabled playback" type="button"><span class="glyphicon glyphicon-backward" aria-hidden="true"></span></button>
+                    <button id="play" class="btn btn-default disabled playback" type="button"><span id="play-glyph" class="glyphicon glyphicon-play" aria-hidden="true"></span></button>
+                    <button id="forward" class="btn btn-default disabled playback" type="button"><span class="glyphicon glyphicon-forward" aria-hidden="true"></span></button>
+                    <button id="reset" class="btn btn-default disabled playback" type="button">Reset Scene</button>
                 </div>
             </div>
         </div>
-        <div id="bottom-wrapper" class="row center-block">
-			<div id="controls-2" class="btn-group-vertical col-md-4" role="group" aria-label="Vertical button group2">
-				<h4 class="text-center">Scene Controls</h4>
-				<div class="dropdown">
-					<button class="btn btn-default btn-block dropdown-toggle" type="button" id="camera-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-						Camera Type
-						<span class="caret"></span>
-					</button>
-					<ul class="dropdown-menu" aria-labelledby="camera-toggle">
-						<li><a id="setOrthographic" href="#">Orthographic</a></li>
-						<li><a id="setPerspective" href="#">Perspective</a></li>
-					</ul>
-				</div>
-                <button id="wireframeToggle" type="button" class="btn btn-default disabled">Toggle Wireframe</button>
-			</div>
-
-			<div id="controls-3" class="col-md-4 text-center">
-					<h4>Wind Vector Controls</h4>
-                <div>Elevation Scale</div>
-                <div id="sceneHeight"></div>
-                <div>Vector Length</div>
-                <div id="vectorLength"></div>
-                <div>Vector Height</div>
-                <div id="vectorHeight"></div>
-                <div>Vector Color</div>
-                <div id="colorSelector"><div style="background-color: #ffff00"></div></div>
-			</div>
-	        <div id="sidebar" class="col-md-4">
-				<h4 class="text-center" data-toggle="tooltip" data-placement="top"
-				data-original-title="List of all SODAR readings shown in the scene">SODAR Log</h4>
-				<div id="console">
-                    <ul id="sodarLog" class="scrollable-menu"></ul>
-                </div>
-			</div>
-		</div>
     </div>
 {% endblock content %}

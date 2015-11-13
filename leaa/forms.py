@@ -57,7 +57,7 @@ class DataFileForm(ModelForm):
 
     file = forms.FileField(
         label='Select Sodar Data',
-        help_text='Must be a .sdr or a .zip of .sdr\''
+        help_text='Must be a .sdr or a .zip of .sdr\'s'
     )
 
     class Meta:

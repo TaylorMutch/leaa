@@ -4,9 +4,10 @@
     "model" : "leaa.Setting",
     "fields" : {
       "vectorLength" : 0.9,
-      "vectorHeight" : 4.0,
-      "terrainScale" : 1.2,
-      "animationSpeed" : 2.0,
+      "vectorHeight" : 2.0,
+      "sceneHeight" : 1,
+      "vectorColor" : "0xffff00",
+      "liveUpdate" : false,
       "user" : 1
     }
   },
@@ -16,8 +17,9 @@
     "fields" : {
       "vectorLength" : 2.0,
       "vectorHeight" : 1.0,
-      "terrainScale" : 0.8,
-      "animationSpeed" : 0.8,
+      "sceneHeight" : 0.8,
+      "vectorColor" : "0xffff00",
+      "liveUpdate" : true,
       "user" : 2
     }
   }

@@ -22,5 +22,29 @@
       "long": -122.25954,
       "terrain" : 1
     }
+  },
+    {
+    "pk" : 3,
+    "model" : "leaa.Station",
+    "fields" : {
+      "name": "McRae_alt",
+      "demX": 186,
+      "demY": 169,
+      "lat": 44.24037,
+      "long": -122.19897,
+      "terrain": 2
+    }
+  },
+  {
+    "pk" : 4,
+    "model" : "leaa.Station",
+    "fields" : {
+      "name": "Primet_alt",
+      "demX": 35,
+      "demY": 276,
+      "lat": 44.211777,
+      "long": -122.25954,
+      "terrain" : 2
+    }
   }
 ]

@@ -25,8 +25,11 @@ urlpatterns = [
         name='datafile-list'),
     url(r'^datafiles/(?P<pk>[0-9]+)/$', views.DataFileDetail.as_view(),
         name='datafile-detail'),
+    url(r'^settings/$', views.SettingList.as_view(),
+        name='setting-list'),
+    url(r'^settings/(?P<pk>[0-9]+)/$', views.SettingDetail.as_view(),
+        name='setting-detail'),
     url(r'^', include('leaa.visUrls')),
-
 ]
 
 urlpatterns += [

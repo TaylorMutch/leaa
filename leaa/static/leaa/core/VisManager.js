@@ -39,13 +39,14 @@ function calcTimestep(value) {
  * rendering the correct ones in the scene.
  * @constructor
  */
-function VisManager(){ //TODO: Could we use this to associate a given scene with our user? hmm...
-
+function VisManager(){
     // Setable attributes
     this.ActiveStations = [];
     this.RecordDate = null;
+    this.Dates = ['No Date Selected'];
     this.SceneObjects = [];
     this.TerrainMap = [];
+    this.TerrainViews = ['Default'];
     this.ActiveDEM = undefined; // gets set later, we just need an initial attribute to define later.
     this.TerrainLoader = new THREE.TerrainLoader();
     this.Animating = false;
@@ -54,7 +55,8 @@ function VisManager(){ //TODO: Could we use this to associate a given scene with
     this.VectorHeight = 1;
     this.VectorLength = 1;
     this.LiveUpdate = false;
-    this.ArrowColor = parseInt("ffff00", 16);
+    //this.ArrowColor = 16776960; // base 10 translation of yellow (0xffff00)
+    this.ArrowColor = '#ffff00';
 }
 
 /**
@@ -90,7 +92,6 @@ VisManager.prototype.StepForward = function() {
             glyph.addClass('glyphicon-play');
         }
     }
-
 };
 /**
  * Step backward.
@@ -113,7 +114,7 @@ VisManager.prototype.Step = function(forward) {
     for (var i = 0; i < this.ActiveStations.length; i++) {
         var station = this.ActiveStations[i];
         if (station.isCurrent) {
-            console.log('Rendering ' + station.name);
+            //console.log('Rendering ' + station.name);
             if (forward) {
                 station.Forward();
             }
@@ -148,16 +149,16 @@ VisManager.prototype.CompareDates = function(increasing) {
             datesToCompare.push(station.dates[station.CheckBackward()]);
         });
     }
-    console.log('Comparing these dates: ' + datesToCompare);
+    //console.log('Comparing these dates: ' + datesToCompare);
 
     // Now we check if we can just use all the stations or if we need to drop one or more.
     if (Math.max.apply(Math, datesToCompare) == Math.min.apply(Math, datesToCompare)) {
-        console.log('Dates match');
+        //console.log('Dates match');
         for (var i = 0; i < this.ActiveStations.length; i++) {
             this.ActiveStations[i].isCurrent = true;
         }
     } else {
-        console.log('Date mismatch, picking dates now');
+        //console.log('Date mismatch, picking dates now');
         var checkDate;
         if (increasing) {
             checkDate = Math.min.apply(Math, datesToCompare);
@@ -171,7 +172,7 @@ VisManager.prototype.CompareDates = function(increasing) {
 };
 
 VisManager.prototype.UpdateTimeline = function(val) {
-    console.log('Scrubber changed, updating values');
+    //console.log('Scrubber changed, updating values');
     manager.CurrentTimestamp = val;            // values for the timeline
     manager.CurrentDate = calcTimestep(val);   // values relevant to our stations
     clearArrows();

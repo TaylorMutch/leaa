@@ -6,11 +6,9 @@
 
 {% block content %}
     <div class="container">
-        <form class="form-signin" method="post">
-
+        <form enctype="multipart/form-data" class="form-signin" method="post">
             {% block title %}
             {% endblock title %}
-
             {% csrf_token %}
             <fieldset>
                 {% for field in form %}

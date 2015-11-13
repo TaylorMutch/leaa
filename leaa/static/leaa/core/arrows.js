@@ -7,6 +7,15 @@
  * Kick off calls to our GPU to render.
  * @param station - a station object containing all relevant code to be shown.
  */
+
+function drawArrows() {
+    clearArrows();
+    $.each(manager.ActiveStations, function(id, station) {
+        renderArrows(station);
+    });
+}
+
+
 function renderArrows(station) {
     // Get the specific arrays we want
     var speedArray = station.speeds[station.index];
@@ -14,12 +23,12 @@ function renderArrows(station) {
     var heightArray = station.heights;
     var stationPos = station.pos;
 
-    // Render the arrows in the scene
+    // Render the arrows in the wind scene
     var arrowSet = makeArrowSet(speedArray, dirArray, heightArray, stationPos);
     $.each(arrowSet, function (handle, arrow) {
         if (arrow !== null) {
             arrow.name = "windvector";
-            scene.add(arrow);
+            wind.add(arrow);
         }
     });
 
@@ -43,7 +52,6 @@ Generates a single arrow within an arrowSet.
  */
 function makeArrow(stationPos, cSpeed, cDirection, cHeight) {
     var origin = new THREE.Vector3(stationPos.x, stationPos.y, stationPos.z + cHeight*.1*manager.VectorHeight);
-    //var vectorColor = 0xffff00;
     var vectorColor = manager.ArrowColor;
     if (isNaN(cSpeed) || cSpeed == 0) {
         return null;
@@ -53,9 +61,16 @@ function makeArrow(stationPos, cSpeed, cDirection, cHeight) {
         var target = origin.clone().add(dir);
         var qDir = new THREE.Vector3().subVectors(target, origin);
         var result = new THREE.ArrowHelper(qDir.normalize(), origin, cSpeed*manager.VectorLength, vectorColor,.5,.35);
-        var r = (qDir.normalize().x > 0) ? parseInt(qDir.normalize().x*255) : 0;
-        var g = (qDir.normalize().x < 0) ? parseInt(qDir.normalize().x*-1*255) : 0;
-        var b = (qDir.normalize().y < 0) ? parseInt(qDir.normalize().y*-1*255) : 0;
+        // Calculate the color of the arrow tip
+        var fromDirection = true;  // TODO: Make this a selectable option?
+        if (fromDirection) {
+            var colorDir = qDir.clone().negate();
+        } else {
+            colorDir = qDir.clone();
+        }
+        var r = (colorDir.normalize().x > 0) ? parseInt(colorDir.normalize().x*255) : 0;
+        var g = (colorDir.normalize().x < 0) ? parseInt(colorDir.normalize().x*-1*255) : 0;
+        var b = (colorDir.normalize().y < 0) ? parseInt(colorDir.normalize().y*-1*255) : 0;
         var colorstring = "rgb(" + r.toString() + ',' + g.toString() + ',' + b.toString() +")";
         result.cone.material.color = new THREE.Color(colorstring);
         return result;
@@ -97,31 +112,15 @@ return new THREE.Vector3(u, v, 0);
 }
 
 /**
-Remove all arrows from a scene
+Remove all arrows from the scene
  */
 function clearArrows() {
     var obj, i;
-    for (i = scene.children.length -1; i >= 0; i--) {
-        obj = scene.children[i];
-        if (obj.name == 'windvector') {
-            scene.remove(obj);
-            console.log('removed windvector');
+    for (i = wind.children.length -1; i >= 0; i--) {
+        obj = wind.children[i];
+        if (obj instanceof THREE.ArrowHelper) {
+            wind.remove(obj);
+            renderer.dispose(obj);
         }
     }
-}
-
-// TOGGLE CONTOURS //TODO: Reuse or remove this code somehow
-function toggleContours(){
-	if (showContours){
-// turn contours off
-		terrain.map = THREE.ImageUtils.loadTexture('static/leaa/resources/reliefHJAndrews.png');
-		terrain.material = terrainMaterial;
-		showContours=false;
-	}
-	else{
-// turn contours on
-		terrainMaterial.map = THREE.ImageUtils.loadTexture('static/leaa/resources/contour_relief.png');
-		terrain.material = terrainMaterial;
-		showContours=true;
-	}
 }

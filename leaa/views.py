@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect, render_to_response
-from leaa.models import Terrain,Station,DataFile,TerrainView,Setting
+from leaa.models import Terrain, Station, DataFile, TerrainView, Setting
 from leaa.serializers import *
 from rest_framework import generics, permissions, renderers, status
 from rest_framework.decorators import api_view
@@ -22,6 +22,7 @@ def api_root(request):
         'terrains'  : reverse('terrain-list', request=request),
         'stations'  : reverse('station-list', request=request),
         'datafiles' : reverse('datafile-list', request=request),
+        'settings'  : reverse('setting-list', request=request),
     })
 
 
@@ -54,13 +55,10 @@ def add_user(request):
         form = UserForm(request.POST)
         if form.is_valid():
             new_user = User.objects.create_user(**form.cleaned_data)
-            #login(new_user.username, new_user.password)
-            # TODO: Make this better? We need to associate our new user with settings now.
             return redirect('leaa.views.index')
     else:
         form = UserForm()
     return render(request, 'leaa/forms/signup.html', {'form':form})
-
 
 
 def index(request):
@@ -127,7 +125,6 @@ def add_datafile(request):
                             d_file.write(chunk)
                     d = DataFile(creationDate=date,station=s,terrain=t,fileName=uf.name)
                     d.save()
-
                 # We got a .zip
                 elif file_ext == '.zip':
                     zf = z.ZipFile(uf, 'r')
@@ -214,3 +211,16 @@ class UserDetail(generics.RetrieveAPIView):
     queryset = User.objects.all()
     serializer_class = UserSerializer
     #permission_classes = (permissions.IsAuthenticatedOrReadOnly)
+
+
+class SettingList(generics.ListAPIView):
+    queryset = Setting.objects.all()
+    serializer_class = SettingSerializer
+
+    def get(self, request, *args, **kwargs):
+        return self.list(request, *args, **kwargs)
+
+
+class SettingDetail(generics.RetrieveAPIView):
+    queryset = Setting.objects.all()
+    serializer_class = SettingSerializer

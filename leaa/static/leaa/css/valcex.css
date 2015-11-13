@@ -2,6 +2,12 @@ body
 {
     font-family: ‘Tahoma’, ‘Geneva’, sans-serif;
     background: slategrey;
+    padding-top: 50px;
+}
+.well
+{
+    position: absolute;
+    padding: 0;
 }
 
 h1
@@ -16,6 +22,7 @@ h2
     font-size:125%;
     line-height:1.2em;
     color:black;
+    margin-bottom: 0;
 }
 
 h4
@@ -28,10 +35,6 @@ form
     color: black;
 }
 
-a
-{
-    color: white;
-}
 
 a:link, a:hover, a:active, a:visited
 {
@@ -39,25 +42,17 @@ a:link, a:hover, a:active, a:visited
     color: deepskyblue;
 }
 
-button
-{
-    /*border-radius: 0.2em;*/
-    margin:0.1em 0;
-}
-
 #top-wrapper
 {
-    height:38em;
-    padding:0.5em;
-    /*border:1px solid black;*/
+    height:80vh;
+    margin:1.2em;
 }
 
-#scene, #sidebar, #controls-1, #controls-2, #controls-3
-{
-    height:100%;
-    /*margin:0 0.5em;*/
+#scene {
+    height: 100%;
+    position: relative;
+    z-index:0;
 }
-
 
 #console
 {
@@ -67,39 +62,56 @@ button
     max-height: 250px;
 }
 
-#controls-1, #controls-2, #controls-3, #controls-4, #sidebar
+#sidebar
 {
-    float:left;
-    width:22%;
-    margin-bottom: 2em;
-    padding-bottom: 2em;
+    position: absolute;
+    left: 52px !important;
+    bottom: 0;
+    overflow: hidden;
+    width:22%
 }
 
+#windrose
+{
+    right: 0;
+    position: relative;
+    z-index: 5;
+}
 
 .scrollable-menu {
-    height: auto;
-    max-height: 200px;
+    max-height: 100px;
     overflow-x: hidden;
 }
 
-/****ColorSelector tags****/
 
-#colorSelector {
-	position: relative;
-	width: 36px;
-	height: 36px;
-	background: url(images/colorpicker/select.png);
-}
-#colorSelector div {
-	position: absolute;
-	top: 3px;
-	left: 3px;
-	width: 30px;
-	height: 30px;
-	background: url(images/colorpicker/select.png) center;
+/* HORIZONTAL dat.GUI control
+
+#horizontal-gui {padding-left:10px;}
+#horizontal-gui > div{min-height: 28px; height: 28px; width: 100%; }
+#horizontal-gui > div > ul  {position: absolute; z-index: 0;}
+#horizontal-gui > div > ul { display: table-row;  }
+#horizontal-gui > div > ul > li { display: table-cell; min-width: 190px ;padding-left: 0px;padding-right:1px}
+#horizontal-gui > div > ul > li.cr { background: none; line-height: normal; vertical-align: top; border-left: 0px !important;border-bottom: 0px}
+#horizontal-gui > div > ul > li.cr >div { background: #1a1a1a; height: 27px !important;padding-left: 6px;}
+#horizontal-gui > div > ul > li.cr > div > span.property-name{padding-top: 6px; }
+#horizontal-gui > div > ul > li.cr.string >div { border-left:4px solid green; }
+#horizontal-gui > div > ul > li.cr.number >div { border-left:4px solid blue;}
+#horizontal-gui > div > ul > li.cr.function >div { border-left:4px solid red;}
+#horizontal-gui > div > ul > li.cr.color >div { border-left:4px solid orange;}
+#horizontal-gui > div > ul > li.cr.boolean>div { border-left:4px solid purple;}
+#horizontal-gui .close-button { display:none;}
+*/
+/* VERTICAL dat.GUI control */
+
+/* color picker hack */
+.saturation-field {margin-right: 0 !important;}
+
+.dg .cr.string input[type=text]
+{
+    color: black !important;
 }
 
-#customWidget {
-	position: relative;
-	height: 36px;
+.c
+{
+    color: black;
 }

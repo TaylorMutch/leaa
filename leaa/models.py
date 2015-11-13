@@ -1,4 +1,5 @@
 from django.db import models
+# from django.db.models.signals import post_save
 from django.contrib.auth.models import User
 # Create your models here.
 
@@ -49,18 +50,19 @@ class DataFile(models.Model):
 
 
 class Setting(models.Model):
-    vectorLength = models.IntegerField()
-    vectorHeight = models.IntegerField()
-    vectorColor = models.CharField(max_length=8) # hex colors are only 8 characters long
-    terrainScale = models.IntegerField()
-    animationSpeed = models.IntegerField()
-    user = models.OneToOneField(User, primary_key=True)
+    vectorLength = models.FloatField(default=1)
+    vectorHeight = models.FloatField(default=1)
+    vectorColor = models.CharField(default='#ffff00', max_length=8)
+    sceneHeight = models.FloatField(default=1)
+    liveUpdate = models.BooleanField(default=False)
+    user = models.ForeignKey(User)
+    terrain = models.ForeignKey('Terrain')
 
-    def __str__(self):
-        user_name = "testname"
-        return user_name + ' ' + str(self.user_id)
 
 class TerrainView(models.Model):
-    controlPos = (models.FloatField(), models.FloatField(), models.FloatField())
-    cameraPos = (models.FloatField(), models.FloatField(), models.FloatField())
-    worldPos = (models.FloatField(), models.FloatField(), models.FloatField())
+    name  = models.CharField(max_length=50)
+    pos_x = models.FloatField()
+    pos_y = models.FloatField()
+    pos_z = models.FloatField()
+    terrain = models.ForeignKey('Terrain')
+    user = models.ForeignKey(User)
