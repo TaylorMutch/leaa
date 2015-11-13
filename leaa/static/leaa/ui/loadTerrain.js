@@ -10,7 +10,7 @@ steal(function () {
      * Initialize our workspace
      */
     function init() {
-        CAM_START = new THREE.Vector3(0,-80,80);
+        CAM_START = new THREE.Vector3(0,-120,120);
         var container = document.getElementById("scene");
 
         // Setup Camera
@@ -97,6 +97,7 @@ steal(function () {
         h_gui.domElement.style.position = 'absolute';
         h_gui.domElement.style.top = '0%';
         h_gui.domElement.style.left = '0%';
+        h_gui.domElement.style.textAlign = 'center';
 
         // Vertical GUI, for setting scene options
         var v_gui = new dat.GUI({autoPlace: false});
@@ -163,6 +164,7 @@ steal(function () {
         v_gui.domElement.style.position='absolute';
         v_gui.domElement.style.top = '0%';
         v_gui.domElement.style.right = '0%';
+        v_gui.domElement.style.textAlign = 'center';
         v_gui.open();
         container.appendChild(v_gui.domElement);
 

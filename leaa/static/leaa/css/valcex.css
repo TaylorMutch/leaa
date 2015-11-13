@@ -7,7 +7,13 @@ body
 .well
 {
     position: absolute;
-    padding: 0;
+    padding-left: 2px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    padding-right: 2px;
+    left: 32%;
+    right: 32%;
+
 }
 
 h1
@@ -44,8 +50,8 @@ a:link, a:hover, a:active, a:visited
 
 #top-wrapper
 {
-    height:80vh;
-    margin:1.2em;
+    height:93vh;
+    margin:0.6em;
 }
 
 #scene {
@@ -59,14 +65,14 @@ a:link, a:hover, a:active, a:visited
     font-family:'Courier New', 'Courier', 'Monaco', monospace;
     font-size:80%;
     height:90%;
-    max-height: 250px;
+    max-height: 120px;
 }
 
 #sidebar
 {
+    left: 5px;
     position: absolute;
-    left: 52px !important;
-    bottom: 0;
+    top: 209px;
     overflow: hidden;
     width:22%
 }
@@ -78,11 +84,21 @@ a:link, a:hover, a:active, a:visited
     z-index: 5;
 }
 
-.scrollable-menu {
-    max-height: 100px;
-    overflow-x: hidden;
+#slider
+{
+    position: absolute;
+    z-index: 5;
+    bottom: 5px;
+    left: 353px;
+    right: 62px;
 }
 
+#playback
+{
+    position: absolute;
+    bottom: 2px;
+    left: 80px;
+}
 
 /* HORIZONTAL dat.GUI control
 

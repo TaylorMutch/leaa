@@ -36,7 +36,7 @@ function getSettings(id) {
         .done(function(response) {
         manager.VectorHeight = response['VectorHeight'];
         manager.VectorLength = response['VectorLength'];
-        manager.SceneHeight = response['SceneHeight'];  // TODO: Should scene height be saved?
+        manager.SceneHeight = response['SceneHeight'];
         manager.LiveUpdate = response['LiveUpdate'];
         manager.ArrowColor = response['ArrowColor'];
         })
@@ -131,6 +131,30 @@ function getTerrainViews(id) {
             viewsFolder.open();
         }
     });
+}
+/**
+ * Global functions that are pretty harmless overall
+ */
+function updateSodarLog(string, updateCurrentLabel) {
+    $('#sodarLog').prepend('<li><a> ' + string + '</a></li>');
+    if (updateCurrentLabel) {
+        $('#current-timestamp-label').html(string);
+    }
+}
 
+/**
+ * Stringify timestamps the way we want them
+ * @param date
+ * @returns {string}
+ */
+function formatTimestamp(date) {
+    var datestring = String(date);
+    var year = datestring.substring(0,2);
+	var month = datestring.substring(2, 4);
+	var day = datestring.substring(4, 6);
+	var hour = datestring.substring(6, 8);
+	var minute = datestring.substring(8, 10);
+    var sec = datestring.substring(10,12);
+	return  month + "/" + day + "/" + year + " at " + hour + ":" + minute + ":" + sec;
 }
 
