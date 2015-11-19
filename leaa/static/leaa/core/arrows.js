@@ -15,7 +15,7 @@ function renderArrows(station) {
 
     // Render the arrows in the wind scene
     var arrowSet = makeArrowSet(speedArray, dirArray, heightArray, stationPos);
-    arrowSet.userData = {name: station.name};
+    arrowSet.userData = {name: station.name, id: station.id};
     wind.add(arrowSet);
 }
 

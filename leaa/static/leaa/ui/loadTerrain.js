@@ -377,6 +377,12 @@ steal(function () {
                         station.label = txSprite;
                         stationLabels.add(txSprite);
                     });
+                    // If labels already exist, we just remove them
+                    if (labels.children.length > 0) {
+                        for (var i = 0; i < labels.children.length; i++) {
+                            labels.remove(labels.children[i]);
+                        }
+                    }
                     labels.add(stationLabels);
 
                     // Get the beginning and ending days from each station, and then set the timeline
@@ -493,8 +499,11 @@ steal(function () {
                 INTERSECTED = intersects[0].object;
                 if (INTERSECTED.parent.parent instanceof THREE.Group) {
                     var dataSet = INTERSECTED.parent.parent.children;
-                    if (manager.CurrentStationSelected != INTERSECTED.parent.parent.userData['name']) {
-                        manager.CurrentStationSelected = INTERSECTED.parent.parent.userData['name'];
+                    //if (manager.CurrentStationSelected != INTERSECTED.parent.parent.userData['name']) {
+                        //manager.CurrentStationSelected = INTERSECTED.parent.parent.userData['name'];
+                    //}
+                    if (manager.CurrentStationSelected != INTERSECTED.parent.parent.userData) {
+                        manager.CurrentStationSelected = INTERSECTED.parent.parent.userData;
                     }
                     updateSodarLog(dataSet);
                 }
@@ -546,6 +555,7 @@ steal(function () {
         // Reset GUI elements
         $('#timelineSlider').slider('option', 'disabled', true);
         $('.playback').addClass('disabled');
+        $('#sodarLog').empty();
         if (datesGUI) {
             terrainFolder.remove(datesGUI);
         }

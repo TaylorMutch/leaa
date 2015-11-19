@@ -100,37 +100,38 @@ function getTerrainViews(id) {
         }
     }
     manager.TerrainViews = [];
-    var terrainViewStrings = [];
+    var terrainViewStrings = ['Default'];
     $.getJSON('/getTerrainViews/', {'terrainID': id}).done( function (response) {
         if (JSON.stringify(response) !== '{}') {
-            //console.log(response);
             $.each(response, function (handle, view) {
                 manager.TerrainViews.push(view);
                 terrainViewStrings.push(view.name);
             });
-            //console.log(terrainViewStrings);
             if (viewsGUI) {
                 viewsFolder.remove(viewsGUI);
             }
             var obj = {
-                'Terrain Views': 'blah'
+                'Terrain Views': 'blah' // Dummy variable for dat.GUI
             };
+            // GUI Callback
             viewsFolder.add(obj, 'Terrain Views', terrainViewStrings)
                 .onChange(function (value) {
                     //console.log(value);
-                    var name = value;
-                    var i;
-                    for (i = 0; i < manager.TerrainViews.length; i++) {
-                        //console.log(manager.TerrainViews[i]);
-                        if (manager.TerrainViews[i].name == name) {
-                            break;
+                    if (value != 'Default') {
+                        var name = value;
+                        var i;
+                        for (i = 0; i < manager.TerrainViews.length; i++) {
+                            //console.log(manager.TerrainViews[i]);
+                            if (manager.TerrainViews[i].name == name) {
+                                break;
+                            }
                         }
+                        var view = manager.TerrainViews[i];
+                        orbit.reset();
+                        camera.position.x = view.pos.x;
+                        camera.position.y = view.pos.y;
+                        camera.position.z = view.pos.z;
                     }
-                    var view = manager.TerrainViews[i];
-                    orbit.reset();
-                    camera.position.x = view.pos.x;
-                    camera.position.y = view.pos.y;
-                    camera.position.z = view.pos.z;
                 });
             viewsFolder.open();
         }
@@ -148,7 +149,7 @@ function updateSodarLog(dataSet) {
         var message = 'Height = ' + data.h + ', Speed = ' + data.spd + 'm/s' + ', Direction = ' + data.dir + '\xB0';
         log.prepend('<li><a> ' + message + '</a></li>');
     }
-    log.prepend('<h3 style="text-align:center;"><a> ' + manager.CurrentStationSelected + '</a></h3>');
+    log.prepend('<h3 style="text-align:center;"><a> ' + manager.CurrentStationSelected.name + '</a></h3>');
 }
 
 /**
@@ -157,7 +158,7 @@ function updateSodarLog(dataSet) {
 function updateSidebar() {
     if (manager.CurrentStationSelected != null) {
         for (var i in wind.children) {
-            if (wind.children[i].userData['name'] == manager.CurrentStationSelected) {
+            if (wind.children[i].userData['name'] == manager.CurrentStationSelected.name) {
                 var dataSet = wind.children[i].children;
                 updateSodarLog(dataSet);
                 break;
