@@ -16,7 +16,12 @@ months = {'Jan':'01',
           'Dec':'12'
 };
 
-//TODO: Make this function... prettier? It's pretty garbled
+/**
+ * Conversion function for interaction with the timeline slider. Takes values chosen from the timeline slider.
+ * @param value - Integer value of a date collected from the timeline slider
+ * @returns {Number} - Integer value corresponding to dates located in Station.dates array
+ * TODO: Make this function... prettier? It's pretty garbled (but functional)
+ */
 function calcTimestep(value) {
     var currentDate = new Date();
     currentDate.setTime(value);
@@ -42,6 +47,7 @@ function calcTimestep(value) {
 function VisManager(){
     // Setable attributes
     this.ActiveStations = [];
+    this.CurrentStationSelected = null;
     this.RecordDate = null;
     this.Dates = ['No Date Selected'];
     this.SceneObjects = [];
@@ -55,7 +61,6 @@ function VisManager(){
     this.VectorHeight = 1;
     this.VectorLength = 1;
     this.LiveUpdate = false;
-    //this.ArrowColor = 16776960; // base 10 translation of yellow (0xffff00)
     this.ArrowColor = '#ffff00';
 }
 
@@ -73,7 +78,8 @@ VisManager.prototype.ResetStations = function() {
         renderArrows(this.ActiveStations[i]);
     }
     this.CurrentDate = calcTimestep(this.CurrentTimestamp);
-    updateSodarLog('Timestamp: ' + formatTimestamp(this.CurrentDate), true);
+    $('#current-timestamp-label').html('Timestamp: ' + formatTimestamp(this.CurrentDate));
+    updateSidebar();
 };
 /**
  * Step forward.
@@ -126,7 +132,8 @@ VisManager.prototype.Step = function(forward) {
     }
     this.CurrentTimestamp = $('#timelineSlider').slider('option', 'value');
     this.CurrentDate = calcTimestep(this.CurrentTimestamp);
-    updateSodarLog('Timestamp: ' + formatTimestamp(this.CurrentDate), true);
+    $('#current-timestamp-label').html('Timestamp: ' + formatTimestamp(manager.CurrentDate));
+    updateSidebar();
 };
 
 /**
@@ -171,6 +178,11 @@ VisManager.prototype.CompareDates = function(increasing) {
     }
 };
 
+/**
+ * Updates the abstract timeline (manager.Timeline) with values chosen from jQuery timeline slider
+ * @param val - value from slider (Date() integer)
+ * @constructor
+ */
 VisManager.prototype.UpdateTimeline = function(val) {
     //console.log('Scrubber changed, updating values');
     manager.CurrentTimestamp = val;            // values for the timeline
@@ -182,5 +194,6 @@ VisManager.prototype.UpdateTimeline = function(val) {
             renderArrows(manager.ActiveStations[i]);
         }
     }
-    updateSodarLog('Timestamp: ' + formatTimestamp(manager.CurrentDate), true);
+    $('#current-timestamp-label').html('Timestamp: ' + formatTimestamp(manager.CurrentDate));
+    updateSidebar();
 };

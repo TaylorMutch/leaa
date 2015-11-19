@@ -3,11 +3,7 @@
  */
 
 /***
- * UI settings handling
- */
-
-/***
- * Settings for terrain and for wind vectors
+ * Save GUI/graphical settings for chosen terrain
  */
 function saveSettings(){
     if (manager.ActiveDEM != undefined) {
@@ -30,7 +26,10 @@ function saveSettings(){
     }
 }
 
-
+/**
+ * jQuery ajax function for obtaining settings for a specific terrain
+ * @param id - terrainID of the user chosen DEM.
+ */
 function getSettings(id) {
     $.getJSON('/getSettings/', {'terrainID': id})
         .done(function(response) {
@@ -47,6 +46,11 @@ function getSettings(id) {
 
 dirty_views = false; //TODO: Decide if this is a good thing to have or if we should eliminate it.
 
+/**
+ * Ajax function for saving views to the server.
+ * User can choose to save locally only or save locally and to the server
+ * TODO: Should we only allow server saves?
+ */
 function saveView(){
     if (manager.ActiveDEM != undefined) {
         var name = prompt('Please give this view a name.');
@@ -78,14 +82,14 @@ function saveView(){
 }
 
 /***
- *Get terrain views from the server.
+ * Get terrain views from the server.
+ * @param id - terrainID used to tell the server which terrain views we want.
  */
 function getTerrainViews(id) {
     var viewsFolder = h_gui.__folders.Views;
     var viewsGUI;
     if (viewsFolder.__controllers[1]) {
         viewsGUI = viewsFolder.__controllers[1];
-        console.log('it exits!');
     }
     if (dirty_views) {
         dirty_views = confirm('You have created views which are not saved to the server. ' +
@@ -133,18 +137,38 @@ function getTerrainViews(id) {
     });
 }
 /**
- * Global functions that are pretty harmless overall
+ * List data of chosen station in the sidebar
+ * @dataSet - array of THREE.ArrowHelper objects which each container encoded userData
  */
-function updateSodarLog(string, updateCurrentLabel) {
-    $('#sodarLog').prepend('<li><a> ' + string + '</a></li>');
-    if (updateCurrentLabel) {
-        $('#current-timestamp-label').html(string);
+function updateSodarLog(dataSet) {
+    var log = $('#sodarLog');
+    log.empty();
+    for (var i in dataSet) {
+        var data = dataSet[i].userData;
+        var message = 'Height = ' + data.h + ', Speed = ' + data.spd + 'm/s' + ', Direction = ' + data.dir + '\xB0';
+        log.prepend('<li><a> ' + message + '</a></li>');
+    }
+    log.prepend('<h3 style="text-align:center;"><a> ' + manager.CurrentStationSelected + '</a></h3>');
+}
+
+/**
+ * Helper function to update the sodarLog
+ */
+function updateSidebar() {
+    if (manager.CurrentStationSelected != null) {
+        for (var i in wind.children) {
+            if (wind.children[i].userData['name'] == manager.CurrentStationSelected) {
+                var dataSet = wind.children[i].children;
+                updateSodarLog(dataSet);
+                break;
+            }
+        }
     }
 }
 
 /**
  * Stringify timestamps the way we want them
- * @param date
+ * @param date - a raw date from station.dates in integer format.
  * @returns {string}
  */
 function formatTimestamp(date) {

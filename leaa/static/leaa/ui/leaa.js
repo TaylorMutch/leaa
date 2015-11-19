@@ -10,7 +10,7 @@
 var VERSION ='1.0.1';
 
 /** Our manager that holds everything together **/
-manager = new VisManager();
+var manager = new VisManager();
 
 var terrains = [];
 $.getJSON('/terrains/')
@@ -46,7 +46,53 @@ $(document).ready(function() {
         $( "#amount" ).val( "$" + s.slider("value"));
     });
     steal("leaa/ui/loadTerrain.js", function() {}); // Load rendering tools
-    steal("leaa/ui/animateWind.js", function() {}); // Wind controls
+    // Playback UI controls
+    steal(function() {
+        $('#forward').on('click', function() {
+            manager.StepForward();
+        });
+        $('#back').on('click', function() {
+            manager.StepBackward();
+	    });
+
+        $('#begin').on('click', function() {
+            manager.ResetStations();
+        });
+        // Enable animation
+	    $('#play').on('click', function() {
+            var glyph = $('#play-glyph');
+            if (glyph.hasClass('glyphicon-play')) {
+                manager.StepForward();
+                manager.Animating = true;
+                intervalID = setInterval(animateStepForward, 1000/4);
+                glyph.removeClass('glyphicon-play');
+                glyph.addClass('glyphicon-pause');
+            } else {
+                stopAnimation();
+                glyph.removeClass('glyphicon-pause');
+                glyph.addClass('glyphicon-play');
+            }
+	    });
+        // Animation loop
+        function animateStepForward() {
+            manager.StepForward();
+        }
+        // Disable animation
+        function stopAnimation() {
+            manager.Animating = false;
+            clearInterval(intervalID);
+        }
+	    // RESET
+	    $('#reset').on('click', function() {
+                if (manager.Animating) {
+                    stopAnimation();
+                }
+                manager.ResetStations();
+                orbit.reset();
+                camera.position.set(CAM_START.x, CAM_START.y, CAM_START.z);
+            }
+        );
+    });
     // Tooltips
     $(function() {
         $('[data-toggle="tooltip-std"]').tooltip({placement: 'right', container: 'body'})

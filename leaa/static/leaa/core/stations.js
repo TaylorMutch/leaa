@@ -1,15 +1,13 @@
 /**
  * Created by Taylor on 10/11/2015.
  */
+
 /**
  * Container for all things scientific to SODAR stations.
  * @param data - Data from the server
- * TODO: Simplify how this is declared, probably a better way to do it but this works for now
  * @constructor
  */
 function Station(data){
-
-    // Data from server
     this.name = data['name'];
     this.dates = data['dates'];
     this.heights = data['heights'];
@@ -23,7 +21,7 @@ function Station(data){
     this.long = data['long'];
     this.terrain = data['terrain'];
     this.id = data['id'];
-
+    this.label = null; // gets set later, will be an instance of THREE.Sprite
     // Initial values for the visualization
     this.index = 0;
     this.isCurrent = true; // TODO: will this work?
@@ -33,7 +31,6 @@ function Station(data){
 Station.prototype.Backward = function() {
     this.index = this.index >= 0 ? this.index - 1 : this.index;
 };
-
 
 Station.prototype.CheckBackward = function() {
     if (this.index > 0) {
@@ -59,7 +56,7 @@ Station.prototype.GetCurrentDate = function() {
 
 /** This takes dates from the manager.CurrentDate */
 Station.prototype.SetCurrentDate = function(_timestamp) {
-    //Make this better? Intelligent way to just find the right timestamp?
+    // TODO: Make this better? Intelligent way to just find the right timestamp?
     var i, j;
 
     var _index = this.dates.indexOf(_timestamp); // get the index of the timestamp

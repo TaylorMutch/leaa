@@ -48,15 +48,15 @@ a:link, a:hover, a:active, a:visited
     color: deepskyblue;
 }
 
-#top-wrapper
+#top-wrapper  /*Necessary to have the scene be the size that it is*/
 {
-    height:93vh;
-    margin:0.6em;
+    height:94.3vh;
 }
 
-#scene {
-    height: 100%;
-    position: relative;
+#scene {    /*Necessary so that scene takes full height*/
+    height: 100%;  /* Parent must declare actual pixel height; this ensures that it takes it */
+    width: 100%;
+    position: static;
     z-index:0;
 }
 
@@ -65,16 +65,23 @@ a:link, a:hover, a:active, a:visited
     font-family:'Courier New', 'Courier', 'Monaco', monospace;
     font-size:80%;
     height:90%;
-    max-height: 120px;
+    /*max-height: 120px;*/
+    max-height: 550px;
 }
 
 #sidebar
 {
-    left: 5px;
+    left: 2px;
     position: absolute;
-    top: 209px;
-    overflow: hidden;
-    width:22%
+    width: 360px;
+    /*top: 259px;*/
+    bottom: 100px;
+    overflow-y: auto;
+}
+
+#sodarLog
+{
+    padding-left: 15px;
 }
 
 #windrose
@@ -88,7 +95,7 @@ a:link, a:hover, a:active, a:visited
 {
     position: absolute;
     z-index: 5;
-    bottom: 5px;
+    bottom: 25px;
     left: 353px;
     right: 62px;
 }
@@ -96,28 +103,9 @@ a:link, a:hover, a:active, a:visited
 #playback
 {
     position: absolute;
-    bottom: 2px;
+    bottom: 15px;
     left: 80px;
 }
-
-/* HORIZONTAL dat.GUI control
-
-#horizontal-gui {padding-left:10px;}
-#horizontal-gui > div{min-height: 28px; height: 28px; width: 100%; }
-#horizontal-gui > div > ul  {position: absolute; z-index: 0;}
-#horizontal-gui > div > ul { display: table-row;  }
-#horizontal-gui > div > ul > li { display: table-cell; min-width: 190px ;padding-left: 0px;padding-right:1px}
-#horizontal-gui > div > ul > li.cr { background: none; line-height: normal; vertical-align: top; border-left: 0px !important;border-bottom: 0px}
-#horizontal-gui > div > ul > li.cr >div { background: #1a1a1a; height: 27px !important;padding-left: 6px;}
-#horizontal-gui > div > ul > li.cr > div > span.property-name{padding-top: 6px; }
-#horizontal-gui > div > ul > li.cr.string >div { border-left:4px solid green; }
-#horizontal-gui > div > ul > li.cr.number >div { border-left:4px solid blue;}
-#horizontal-gui > div > ul > li.cr.function >div { border-left:4px solid red;}
-#horizontal-gui > div > ul > li.cr.color >div { border-left:4px solid orange;}
-#horizontal-gui > div > ul > li.cr.boolean>div { border-left:4px solid purple;}
-#horizontal-gui .close-button { display:none;}
-*/
-/* VERTICAL dat.GUI control */
 
 /* color picker hack */
 .saturation-field {margin-right: 0 !important;}
