@@ -20,9 +20,9 @@ import zipfile as z
 def api_root(request):
     return Response({
         'terrains'  : reverse('terrain-list', request=request),
-        'stations'  : reverse('station-list', request=request),
-        'datafiles' : reverse('datafile-list', request=request),
-        'settings'  : reverse('setting-list', request=request),
+        #'stations'  : reverse('station-list', request=request),
+        #'datafiles' : reverse('datafile-list', request=request),
+        #'settings'  : reverse('setting-list', request=request),
     })
 
 
@@ -161,12 +161,12 @@ class TerrainList(generics.ListAPIView):
         return self.list(request, *args, **kwargs)
 
 
-class TerrainDetail(generics.RetrieveUpdateDestroyAPIView):
+class TerrainDetail(generics.RetrieveUpdateAPIView):
     queryset = Terrain.objects.all()
     serializer_class = TerrainSerializer
     permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
 
-
+'''
 class StationList(generics.ListAPIView):
     queryset = Station.objects.all()
     serializer_class = StationSerializer
@@ -224,3 +224,5 @@ class SettingList(generics.ListAPIView):
 class SettingDetail(generics.RetrieveAPIView):
     queryset = Setting.objects.all()
     serializer_class = SettingSerializer
+
+'''

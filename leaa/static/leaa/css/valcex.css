@@ -13,7 +13,12 @@ body
     padding-right: 2px;
     left: 32%;
     right: 32%;
+}
 
+#rec_div
+{
+    position: absolute;
+    left: 245px;
 }
 
 h1
@@ -48,12 +53,12 @@ a:link, a:hover, a:active, a:visited
     color: deepskyblue;
 }
 
-#top-wrapper  /*Necessary to have the scene be the size that it is*/
+#scene-wrapper  /*Necessary to have the scene be the size that it is*/
 {
     height:94.3vh;
 }
 
-#scene {    /*Necessary so that scene takes full height*/
+#scene {    /*Necessary so that scene takes full height of parent div*/
     height: 100%;  /* Parent must declare actual pixel height; this ensures that it takes it */
     width: 100%;
     position: static;
@@ -69,12 +74,17 @@ a:link, a:hover, a:active, a:visited
     max-height: 550px;
 }
 
+.download
+{
+    margin-left: 5px;
+}
+
 #sidebar
 {
     left: 2px;
     position: absolute;
     width: 360px;
-    /*top: 259px;*/
+    top: 295px;
     bottom: 100px;
     overflow-y: auto;
 }

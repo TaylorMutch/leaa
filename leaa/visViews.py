@@ -147,3 +147,11 @@ def saveTerrainView(request):
         return HttpResponse(status=status.HTTP_200_OK)
     else:
         return HttpResponse(status=status.HTTP_511_NETWORK_AUTHENTICATION_REQUIRED)
+
+@api_view(['GET'])
+def getTerrainList(request):
+    terrains = Terrain.objects.all().values('name')
+    names = []
+    for terrain in terrains:
+        names.append(terrain['name'])
+    return HttpResponse(json.dumps(names), status=status.HTTP_200_OK)

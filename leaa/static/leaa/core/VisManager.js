@@ -51,7 +51,6 @@ function VisManager(){
     this.RecordDate = null;
     this.Dates = ['No Date Selected'];
     this.SceneObjects = [];
-    this.TerrainMap = [];
     this.TerrainViews = [];
     this.ActiveDEM = undefined; // gets set later, we just need an initial attribute to define later.
     this.TerrainLoader = new THREE.TerrainLoader();
@@ -69,13 +68,17 @@ function VisManager(){
  * @constructor
  */
 VisManager.prototype.ResetStations = function() {
+    var i;
     clearArrows();
     $('#timelineSlider').slider({value: this.Timeline.beginTime.getTime()});
     this.CurrentTimestamp = this.Timeline.beginTime.getTime();
-    for (var i = 0; i < this.ActiveStations.length; i++) {
+    for (i = 0; i < this.ActiveStations.length; i++) {
         this.ActiveStations[i].ResetIndex();
-        this.ActiveStations[i].isCurrent = true;
-        renderArrows(this.ActiveStations[i]);
+        //this.ActiveStations[i].isCurrent = true;
+    }
+    this.CompareDates(true);  // Since we are resetting, we check for forward. This must happen before we renderArrows
+    for (i = 0; i < this.ActiveStations.length; i++) {
+                if (this.ActiveStations[i].isCurrent) renderArrows(this.ActiveStations[i]);
     }
     this.CurrentDate = calcTimestep(this.CurrentTimestamp);
     $('#current-timestamp-label').html('Timestamp: ' + formatTimestamp(this.CurrentDate));
@@ -96,6 +99,14 @@ VisManager.prototype.StepForward = function() {
             clearInterval(intervalID);
             glyph.removeClass('glyphicon-pause');
             glyph.addClass('glyphicon-play');
+            if (manager.Recording) {
+                manager.Recording = false;
+                var blob = window.URL.createObjectURL(Whammy.fromImageArray(frames, 1000/ 60));
+                $('#rec_div').append('<a class="download" href=' + blob.toString() +
+                ' + download="' + manager.ActiveDEM.name + manager.RecordDate + '.webm">Download Video</a>');
+                $('#rec_btn').removeClass('recording');
+                frames = [];
+            }
         }
     }
 };

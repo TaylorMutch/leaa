@@ -182,4 +182,3 @@ function formatTimestamp(date) {
     var sec = datestring.substring(10,12);
 	return  month + "/" + day + "/" + year + " at " + hour + ":" + minute + ":" + sec;
 }
-

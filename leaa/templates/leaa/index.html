@@ -4,26 +4,11 @@
     <link href="{% static "leaa/css/valcex.css" %}" rel="stylesheet">
 {% endblock css %}
 {% block js %}
-    <script src="{% static "leaa/js/stats.min.js" %}"></script>
-    <script src="{% static "leaa/js/dat.gui.min.js" %}"></script>
-    <script src="{% static "leaa/three/three.min.js" %}"></script>
-    <script src="{% static "leaa/three/CombinedCamera.js" %}"></script>
-    <script src="{% static "leaa/three/OrbitControls.js" %}"></script>
-    <script src="{% static "leaa/three/TerrainLoader.js" %}"></script>
-    <script src="{% static "leaa/three/Screenshot.js" %}"></script>
-    <!-- VALCEX CORE LIBRARY -->
-    <script src="{% static "leaa/core/VisManager.js" %}"></script>
-    <script src="{% static "leaa/core/stations.js" %}"></script>
-    <script src="{% static "leaa/core/arrows.js" %}"></script>
-    <script src="{% static "leaa/core/timeline.js" %}"></script>
-    <script src="{% static "leaa/core/sprites.js" %}"></script>
-    <!-- VALCEX UI SCRIPTS (via steal.js) -->
     <script src="{% static "steal/steal.js" %}"></script>
     <script src="{% static "leaa/ui/leaa.js" %}"></script>
-    <script src="{% static "leaa/ui/settings.js" %}"></script>
 {% endblock js %}
 {% block content %}
-    <div id="top-wrapper">
+    <div id="scene-wrapper">
         <div id="scene">
             <div id="timestamp-well" class="well">
                 <div id="current-timestamp-container">
@@ -38,10 +23,18 @@
             <div id='playback' class="row">
                 <div class="col-lg-12">
                     <div class="btn-group">
-                        <button id="begin" class="btn btn-default disabled playback" type="button"><span class="glyphicon glyphicon-repeat" aria-hidden="true"></span></button>
-                        <button id="back" class="btn btn-default disabled playback" type="button"><span class="glyphicon glyphicon-backward" aria-hidden="true"></span></button>
-                        <button id="play" class="btn btn-default disabled playback" type="button"><span id="play-glyph" class="glyphicon glyphicon-play" aria-hidden="true"></span></button>
-                        <button id="forward" class="btn btn-default disabled playback" type="button"><span class="glyphicon glyphicon-forward" aria-hidden="true"></span></button>
+                        <button id="begin" class="btn btn-default disabled playback" type="button">
+                            <span class="glyphicon glyphicon-repeat" aria-hidden="true"></span>
+                        </button>
+                        <button id="back" class="btn btn-default disabled playback" type="button">
+                            <span class="glyphicon glyphicon-backward" aria-hidden="true"></span>
+                        </button>
+                        <button id="play" class="btn btn-default disabled playback" type="button">
+                            <span id="play-glyph" class="glyphicon glyphicon-play" aria-hidden="true"></span>
+                        </button>
+                        <button id="forward" class="btn btn-default disabled playback" type="button">
+                            <span class="glyphicon glyphicon-forward" aria-hidden="true"></span>
+                        </button>
                         <button id="reset" class="btn btn-default disabled playback" type="button">Reset Scene</button>
                     </div>
                 </div>

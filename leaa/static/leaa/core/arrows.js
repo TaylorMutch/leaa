@@ -2,6 +2,11 @@
  * Created by Taylor on 10/12/2015.
  */
 
+// Modulo fix, because JavaScript doesn't have a true modulus.
+Number.prototype.mod = function(n) {
+    return ((this%n)+n)%n;
+};
+
 /**
  * Entry point function for rendering arrows to the scene based on raw station data.
  * @param station - a Station object which contains all variables necessary to associate vector objects with the station
@@ -85,32 +90,15 @@ function makeArrow(stationPos, cSpeed, cDirection, cHeight) {
  * Dept. of Forest Science, Oregon State University, 2006
  * last update 24-Mar-2009 @ COAS'''
  *
+ * Adapted to VALCEX 20-Nov-2015, Taylor Mutch
+ *
  * @param dir - polar direction
  * @returns {THREE.Vector3}, the vector direction in model coordinates.
  */
 function calcDirection(dir) {
-    var dirRadians = (dir/360.0)*2*Math.PI;
-    var u = 0;
-    var v = 0;
-
-    if (dirRadians > 0 && dirRadians <= Math.PI * 0.5) {
-        u = Math.sin(dirRadians);
-        v = -Math.cos(dirRadians);
-    }
-    else if (dirRadians > Math.PI * 0.5 && dirRadians <= Math.PI) {
-        u = -Math.sin(2*Math.PI - dirRadians);
-        v = -Math.cos(2*Math.PI - dirRadians);
-    }
-    else if (dirRadians > Math.PI && dirRadians <= Math.PI * 1.5) {
-        u = -Math.sin(dirRadians - Math.PI);
-        v = Math.cos(dirRadians - Math.PI);
-    }
-    else if (dirRadians > Math.PI * 1.5 || dirRadians == 0) {
-        u = Math.sin(Math.PI - dirRadians);
-        v = Math.cos(Math.PI - dirRadians);
-    }
-    //console.log("u = " + u + " v = " + v);
-    return new THREE.Vector3(u, v, 0);
+    var cDir = (dir - 180).mod(360);            // reverse the direction we are coming from (convert to polar coordiantes)
+    var dirRadians = (cDir/360.0)*2*Math.PI;    // convert to radians to use js math functions
+    return new THREE.Vector3(Math.sin(dirRadians),Math.cos(dirRadians), 0); // return vector with cartesian uv coordinates
 }
 
 /**

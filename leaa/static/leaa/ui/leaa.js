@@ -1,16 +1,10 @@
 /**
  * Created by Taylor on 9/8/2015.
  */
-/**
-    Steal document for LEAA.
-    Loads any scripts via jQuery and hands them over to the client, making them available
-    right as the DOM finishes loading. This ensures that all assets are loaded before
-    the user tries to do anything initially.
- */
+
 var VERSION ='1.0.1';
 
-/** Our manager that holds everything together **/
-var manager = new VisManager();
+var manager;
 
 var terrains = [];
 $.getJSON('/terrains/')
@@ -20,32 +14,30 @@ $.getJSON('/terrains/')
         });
     }
 );
+
 $(document).ready(function() {
-    /**
-     * Our timeline slider.
-     * Initialized to be disabled with dummy values because we don't know what the begin/end values are yet.
-     * When enabled, the stop event triggers a render event based on the timestamp that it receives
-     */
-    $(function() {
-        var s = $("#timelineSlider");
-        s.slider({
-            disabled: true,
-            value:0,
-            min: 0,
-            max: 1,
-            step: 1,
-            slide: function( event, ui ) {
-                $( "#amount" ).val( "$" + ui.value );
-                if (manager.LiveUpdate) manager.UpdateTimeline(ui.value);
-            },
-            // This is triggered when a user picks up and drops the slider.
-            stop: function( event, ui ) {
-                if (!manager.LiveUpdate) manager.UpdateTimeline(ui.value);
-            }
-        });
-        $( "#amount" ).val( "$" + s.slider("value"));
+
+    // External scripts
+    steal("leaa/js/stats.min.js", function() {});
+    steal("leaa/js/dat.gui.min.js", function() {});
+    steal("leaa/three/three.min.js", function() {});
+    steal("leaa/three/CombinedCamera.js", function() {});
+    steal("leaa/three/OrbitControls.js", function() {});
+    steal("leaa/three/TerrainLoader.js", function() {});
+    steal("leaa/three/Screenshot.js", function() {});
+
+    // Core Scripts
+    steal("leaa/core/stations.js", function() {});
+    steal("leaa/core/arrows.js", function() {});
+    steal("leaa/core/timeline.js", function() {});
+    steal("leaa/core/VisManager.js", function() {
+        manager = new VisManager(); //Our manager that holds everything together
     });
-    steal("leaa/ui/loadTerrain.js", function() {}); // Load rendering tools
+    steal("leaa/core/sprites.js", function() {});
+    steal("leaa/js/whammy.js", function() {});
+    steal("leaa/ui/settings.js", function() {});
+    steal("leaa/ui/loader.js", function() {}); // Load rendering tools
+
     // Playback UI controls
     steal(function() {
         $('#forward').on('click', function() {
@@ -73,6 +65,30 @@ $(document).ready(function() {
                 glyph.addClass('glyphicon-play');
             }
 	    });
+        $('#rec_btn').on('click', function() {
+            if ($(this).hasClass('recording')) {
+                stopRecording();
+            } else {
+                var message = [
+                    'Begin capturing scene?',
+                    'This will affect system performance,',
+                    'and may not work on all browsers.',
+                    '\n\v',
+                    'MUST USE Chrome to use recording features.'
+                ].join(' ');
+                var proceed = confirm(message);
+                if (proceed) {
+                    var glyph = $('#play-glyph');
+                    glyph.removeClass('glyphicon-play');
+                    glyph.addClass('glyphicon-pause');
+                    $(this).addClass('recording');
+                    manager.Recording = true;
+                    manager.StepForward();
+                    manager.Animating = true;
+                    intervalID = setInterval(animateStepForward, 1000);
+                }
+            }
+        });
         // Animation loop
         function animateStepForward() {
             manager.StepForward();
@@ -82,6 +98,20 @@ $(document).ready(function() {
             manager.Animating = false;
             clearInterval(intervalID);
         }
+        // Disable recording
+        function stopRecording() {
+            var glyph = $('#play-glyph');
+            manager.Recording = false;
+            var blob = window.URL.createObjectURL(Whammy.fromImageArray(frames, 1000/ 60));
+            $('#rec_div').append('<a class="download" href=' + blob.toString() +
+                ' + download="' + manager.ActiveDEM.name + manager.RecordDate + '.webm">Download Video</a>');
+            stopAnimation();
+            $(this).removeClass('recording');
+            glyph.removeClass('glyphicon-pause');
+            glyph.addClass('glyphicon-play');
+            frames = [];
+        }
+
 	    // RESET
 	    $('#reset').on('click', function() {
                 if (manager.Animating) {
@@ -92,6 +122,31 @@ $(document).ready(function() {
                 camera.position.set(CAM_START.x, CAM_START.y, CAM_START.z);
             }
         );
+    });
+
+    /**
+     * Our timeline slider.
+     * Initialized to be disabled with dummy values because we don't know what the begin/end values are yet.
+     * When enabled, the stop event triggers a render event based on the timestamp that it receives
+     */
+    $(function() {
+        var s = $("#timelineSlider");
+        s.slider({
+            disabled: true,
+            value:0,
+            min: 0,
+            max: 1,
+            step: 1,
+            slide: function( event, ui ) {
+                $( "#amount" ).val( "$" + ui.value );
+                if (manager.LiveUpdate) manager.UpdateTimeline(ui.value);
+            },
+            // This is triggered when a user picks up and drops the slider.
+            stop: function( event, ui ) {
+                if (!manager.LiveUpdate) manager.UpdateTimeline(ui.value);
+            }
+        });
+        $( "#amount" ).val( "$" + s.slider("value"));
     });
     // Tooltips
     $(function() {

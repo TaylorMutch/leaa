@@ -24,7 +24,7 @@ function Station(data){
     this.label = null; // gets set later, will be an instance of THREE.Sprite
     // Initial values for the visualization
     this.index = 0;
-    this.isCurrent = true; // TODO: will this work?
+    this.isCurrent = true;
     this.pos = new THREE.Vector3(0,0,0);
 }
 
