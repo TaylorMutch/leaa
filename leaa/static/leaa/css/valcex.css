@@ -18,7 +18,8 @@ body
 #rec_div
 {
     position: absolute;
-    left: 245px;
+    left: 5px;
+    top: 265px;
 }
 
 h1
@@ -94,12 +95,14 @@ a:link, a:hover, a:active, a:visited
     padding-left: 15px;
 }
 
+/*
 #windrose
 {
     right: 0;
     position: relative;
     z-index: 5;
 }
+*/
 
 #slider
 {

@@ -46,6 +46,7 @@ function calcTimestep(value) {
  */
 function VisManager(){
     // Setable attributes
+    this.SelectableData = false;
     this.ActiveStations = [];
     this.CurrentStationSelected = null;
     this.RecordDate = null;

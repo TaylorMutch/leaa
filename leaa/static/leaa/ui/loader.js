@@ -7,7 +7,7 @@
 steal(function () {
 
     init();   // Init the workspace
-    render(); // One call to render to prep the workspace.
+    //render(); // One call to render to prep the workspace.
 
     /**
      * Initialize our workspace and graphics variables
@@ -30,6 +30,16 @@ steal(function () {
         // Setup Scenes - each scene acts to serve a different purpose
         scene = new THREE.Scene(); // contains the DEM and lighting. Elements that need to be displayed but not picked go here.
         scene.add(camera);
+
+        // Windrose color scale
+        var windrose = new THREE.Sprite(
+            new THREE.SpriteMaterial({map: THREE.ImageUtils.loadTexture('/static/leaa/resources/quick_windrose.png')})
+        );
+        windrose.position.set(12.8,-4,-20);
+        windrose.scale.set(.8,5,1);
+        windrose.name = 'windrose';
+        camera.add(windrose);
+
         wind = new THREE.Scene();  // wind vector objects. Picking is done on this scene only.
         labels = new THREE.Scene();// contains 2D canvas elements. Must go on top of DEM but not be pickable.
 
@@ -219,6 +229,8 @@ steal(function () {
             }
         );
         wvcontrols.add(manager, 'LiveUpdate').name('Live Update?').listen();
+        wvcontrols.add(manager, 'SelectableData').name('Selectable?').listen();
+        wvcontrols.open();
         var elevcontrols = v_gui.addFolder('Terrain Controls', "a");
         elevcontrols.add(manager, 'SceneHeight',.5,2).listen().name('Height Scale').onChange(
             function() {
@@ -249,7 +261,7 @@ steal(function () {
         v_gui.domElement.style.textAlign = 'center';
         v_gui.open();
         container.appendChild(v_gui.domElement);
-
+        /*
         var wr_div = document.createElement('DIV');
         var wr_img = new Image();
         wr_img.onload = function() {
@@ -260,6 +272,7 @@ steal(function () {
         wr_div.style.bottom = '15px';
         wr_div.style.right = '0%';
         container.appendChild(wr_div);
+        */
 
         if (window.chrome !== undefined) { // Since recording only works with Chrome...
             var rec_div = document.createElement('DIV');
@@ -297,7 +310,7 @@ steal(function () {
             updateStationPosition(station);
             station.label.position.set(station.pos.x, station.pos.y, station.pos.z);
         });
-        var bbox = scene.children[2];
+        var bbox = scene.children[scene.children.length-1];
         bbox.update();
     }
 
@@ -610,11 +623,13 @@ steal(function () {
                 INTERSECTED_STATIC.parent.cone.material.emissive.setHex(0xffff00);
                 INTERSECTED_STATIC.parent.scale.set(1.1,1.1,1.1);
 
-                // Show the values of the object we just moused over in the current-timestamp-label
-                var data = INTERSECTED_STATIC.parent.userData;
-                var name = INTERSECTED_STATIC.parent.parent.userData.name;
-                var message = 'Station: ' + name + ', Height: ' + data.h + ', Speed: ' + data.spd + 'm/s' + ', Direction: ' + data.dir + '\xB0';
-                $('#current-timestamp-label').html(message);
+                if (manager.SelectableData) {
+                    // Show the values of the object we just moused over in the current-timestamp-label
+                    var data = INTERSECTED_STATIC.parent.userData;
+                    var name = INTERSECTED_STATIC.parent.parent.userData.name;
+                    var message = 'Station: ' + name + ', Height: ' + data.h + ', Speed: ' + data.spd + 'm/s' + ', Direction: ' + data.dir + '\xB0';
+                    $('#current-timestamp-label').html(message);
+                }
             }
         } else {
             if (INTERSECTED_STATIC) { // If we selected an object, we want to restore its state
@@ -631,36 +646,38 @@ steal(function () {
      * Get the position of our mouse for picking stations and update the sodarLog
      */
     function onDocumentMouseDown() {
-        //if (camera.inPerspectiveMode) { // TODO: Fix the broken combined camera... again
-        //    raycaster.setFromCamera(mouse, camera.cameraP);
-        //} else {
-        //    raycaster.setFromCamera(mouse, camera.cameraO);
-        //}
-        raycaster.setFromCamera(mouse, camera);
-        var intersects = raycaster.intersectObjects(wind.children, true);
-        if (intersects.length > 0) {
+        if (manager.SelectableData) {
+            //if (camera.inPerspectiveMode) { // TODO: Fix the broken combined camera... again
+            //    raycaster.setFromCamera(mouse, camera.cameraP);
+            //} else {
+            //    raycaster.setFromCamera(mouse, camera.cameraO);
+            //}
+            raycaster.setFromCamera(mouse, camera);
+            var intersects = raycaster.intersectObjects(wind.children, true);
+            if (intersects.length > 0) {
 
-            if (INTERSECTED != intersects[0].object) {
+                if (INTERSECTED != intersects[0].object) {
 
-                INTERSECTED = intersects[0].object;
+                    INTERSECTED = intersects[0].object;
 
-                if (INTERSECTED.parent.parent instanceof THREE.Group) {
+                    if (INTERSECTED.parent.parent instanceof THREE.Group) {
 
-                    var dataSet = INTERSECTED.parent.parent.children;
-                    if (manager.CurrentStationSelected != INTERSECTED.parent.parent.userData) {
-                        manager.CurrentStationSelected = INTERSECTED.parent.parent.userData;
+                        var dataSet = INTERSECTED.parent.parent.children;
+                        if (manager.CurrentStationSelected != INTERSECTED.parent.parent.userData) {
+                            manager.CurrentStationSelected = INTERSECTED.parent.parent.userData;
+                        }
+
+                        updateSodarLog(dataSet);
+
                     }
-
-                    updateSodarLog(dataSet);
 
                 }
 
+            } else {
+
+                INTERSECTED = null;
+
             }
-
-        } else {
-
-            INTERSECTED = null;
-
         }
     }
 

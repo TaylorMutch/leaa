@@ -82,10 +82,10 @@ $(document).ready(function() {
                     glyph.removeClass('glyphicon-play');
                     glyph.addClass('glyphicon-pause');
                     $(this).addClass('recording');
+                    manager.ResetStations();
                     manager.Recording = true;
-                    manager.StepForward();
                     manager.Animating = true;
-                    intervalID = setInterval(animateStepForward, 1000);
+                    intervalID = setInterval(animateStepForward, 1500);
                 }
             }
         });
