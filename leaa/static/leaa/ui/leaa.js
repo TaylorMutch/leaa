@@ -16,25 +16,26 @@ $.getJSON('/terrains/')
 );
 
 $(document).ready(function() {
+    //steal("leaa/three/CombinedCamera.js", function() {}); //TODO: Fix combined camera?
 
     // External scripts
     steal("leaa/js/stats.min.js", function() {});
     steal("leaa/js/dat.gui.min.js", function() {});
+    steal("leaa/js/whammy.js", function() {});
     steal("leaa/three/three.min.js", function() {});
-    steal("leaa/three/CombinedCamera.js", function() {});
-    steal("leaa/three/OrbitControls.js", function() {});
-    steal("leaa/three/TerrainLoader.js", function() {});
-    steal("leaa/three/Screenshot.js", function() {});
+    steal("leaa/min/OrbitControl.min.js", function() {});
+    steal("leaa/min/TerrainLoader.min.js", function() {});
+    steal("leaa/min/Screenshot.min.js", function() {});
 
     // Core Scripts
-    steal("leaa/core/stations.js", function() {});
-    steal("leaa/core/arrows.js", function() {});
-    steal("leaa/core/timeline.js", function() {});
+
+    steal("leaa/core/stations.js", function() {}); //
+    steal("leaa/core/arrows.js", function() {}); //
+    steal("leaa/core/timeline.js", function() {}); //
+    steal("leaa/core/sprites.js", function() {});
     steal("leaa/core/VisManager.js", function() {
         manager = new VisManager(); //Our manager that holds everything together
     });
-    steal("leaa/core/sprites.js", function() {});
-    steal("leaa/js/whammy.js", function() {});
     steal("leaa/ui/settings.js", function() {});
     steal("leaa/ui/loader.js", function() {}); // Load rendering tools
 
@@ -79,11 +80,16 @@ $(document).ready(function() {
                 var proceed = confirm(message);
                 if (proceed) {
                     var glyph = $('#play-glyph');
+                    if (manager.Animating) {
+                        stopAnimation();
+                        glyph.removeClass('glyphicon-pause');
+                        glyph.addClass('glyphicon-play');
+                    }
                     glyph.removeClass('glyphicon-play');
                     glyph.addClass('glyphicon-pause');
                     $(this).addClass('recording');
                     manager.ResetStations();
-                    manager.Recording = true;
+                    manager.Recording = true;   // Enable recording in the render loop
                     manager.Animating = true;
                     intervalID = setInterval(animateStepForward, 1500);
                 }
@@ -102,6 +108,8 @@ $(document).ready(function() {
         function stopRecording() {
             var glyph = $('#play-glyph');
             manager.Recording = false;
+
+            // Compile the video
             var blob = window.URL.createObjectURL(Whammy.fromImageArray(frames, 1000/ 60));
             $('#rec_div').append('<a class="download" href=' + blob.toString() +
                 ' + download="' + manager.ActiveDEM.name + manager.RecordDate + '.webm">Download Video</a>');
@@ -116,6 +124,10 @@ $(document).ready(function() {
 	    $('#reset').on('click', function() {
                 if (manager.Animating) {
                     stopAnimation();
+                    var glyph = $('#play-glyph');
+                    glyph.removeClass('glyphicon-pause');
+                    glyph.addClass('glyphicon-play');
+
                 }
                 manager.ResetStations();
                 orbit.reset();
