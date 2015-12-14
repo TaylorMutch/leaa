@@ -20,15 +20,14 @@ $(document).ready(function() {
 
     // External scripts
     steal("leaa/js/stats.min.js", function() {});
-    steal("leaa/js/dat.gui.min.js", function() {});
+    steal("leaa/js/dat.gui.js", function() {});
     steal("leaa/js/whammy.js", function() {});
     steal("leaa/three/three.min.js", function() {});
-    steal("leaa/min/OrbitControl.min.js", function() {});
-    steal("leaa/min/TerrainLoader.min.js", function() {});
-    steal("leaa/min/Screenshot.min.js", function() {});
+    steal("leaa/three/OrbitControls.js", function() {});
+    steal("leaa/three/TerrainLoader.js", function() {});
+    steal("leaa/three/Screenshot.js", function() {});
 
     // Core Scripts
-
     steal("leaa/core/stations.js", function() {}); //
     steal("leaa/core/arrows.js", function() {}); //
     steal("leaa/core/timeline.js", function() {}); //
