@@ -7,7 +7,7 @@
 steal(function () {
 
     init();   // Init the workspace
-    //render(); // One call to render to prep the workspace.
+    render(); // One call to render to prep the workspace.
 
     /**
      * Initialize our workspace and graphics variables
@@ -350,9 +350,6 @@ steal(function () {
                     manager.rawDEM = new Float32Array(data); // copy the data so we can redraw when we need to
 
                     var i;
-                    //var max = Math.max.apply(null, manager.rawDEM);  // maximum call stack size exceeded ERROR!!! ahjhjh
-                    //console.log(max);
-                    //var offset = ((max / 65535) * manager.ActiveDEM.maxHeight) / 2; // amount to translate down so we can look at terrains with arb. height
                     var offset = (Math.pow(manager.ActiveDEM.maxHeight,2) / 65535) /2;
                     var bufferPlane = new THREE.PlaneBufferGeometry(temp_terrain.MAPx, temp_terrain.MAPy, temp_terrain.DEMx-1, temp_terrain.DEMy-1);
                     var bufferArray = bufferPlane.attributes.position.array;
@@ -595,13 +592,13 @@ steal(function () {
      * Our window resize function, for adjusting the renderer sizes and camera aspects
      */
     function onWindowResize() { // Using CombinedCamera API, which mimics perspectiveCamera API
-
-        var container = document.getElementById('scene');
-        //camera.setSize(container.offsetWidth, container.offsetHeight); // TODO: Fix combined camera
-        camera.aspect = container.offsetWidth/container.offsetHeight;
-        renderer.setSize(container.offsetWidth, container.offsetHeight);
-        camera.updateProjectionMatrix();
-
+        if (!manager.Recording) {   // Resizing the window while recording breaks video encoding
+            var container = document.getElementById('scene');
+            //camera.setSize(container.offsetWidth, container.offsetHeight); // TODO: Fix combined camera
+            camera.aspect = container.offsetWidth / container.offsetHeight;
+            renderer.setSize(container.offsetWidth, container.offsetHeight);
+            camera.updateProjectionMatrix();
+        }
     }
 
     /**

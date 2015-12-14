@@ -72,15 +72,15 @@ $(document).ready(function() {
             } else {
                 var message = [
                     'Begin capturing scene?',
-                    'This will affect system performance,',
-                    'and may not work on all browsers.',
+                    '\n\v',
+                    'This will affect system performance.',
                     '\n\v',
                     'MUST USE Chrome to use recording features.'
                 ].join(' ');
                 var proceed = confirm(message);
                 if (proceed) {
                     var glyph = $('#play-glyph');
-                    if (manager.Animating) {
+                    if (manager.Animating) {    // stop the animation loop so we can restart it with the right timing
                         stopAnimation();
                         glyph.removeClass('glyphicon-pause');
                         glyph.addClass('glyphicon-play');
@@ -89,6 +89,12 @@ $(document).ready(function() {
                     glyph.addClass('glyphicon-pause');
                     $(this).addClass('recording');
                     manager.ResetStations();
+                    for (var i = camera.children.length -1; i >= 0; i--) {
+                        if (camera.children[i].name == "windrose") {
+                            camera.children[i].visible = true;
+                            break;
+                        }
+                    }
                     manager.Recording = true;   // Enable recording in the render loop
                     manager.Animating = true;
                     intervalID = setInterval(animateStepForward, 1500);
@@ -114,6 +120,12 @@ $(document).ready(function() {
             $('#rec_div').append('<a class="download" href=' + blob.toString() +
                 ' + download="' + manager.ActiveDEM.name + manager.RecordDate + '.webm">Download Video</a>');
             stopAnimation();
+            for (var i = camera.children.length -1; i >= 0; i--){
+                if (camera.children[i].name == "windrose") {
+                    camera.children[i].visible = false;
+                    break;
+                }
+            }
             $(this).removeClass('recording');
             glyph.removeClass('glyphicon-pause');
             glyph.addClass('glyphicon-play');
